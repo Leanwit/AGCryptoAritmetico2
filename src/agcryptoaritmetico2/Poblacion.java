@@ -58,6 +58,6 @@ public class Poblacion {
             resultado += palabra.charAt(nrand1);
             palabra = palabra.substring(0, nrand1) + palabra.substring(nrand1 + 1);
         }
-        return resultado;
+        return resultado;// retorna resultado
     }
 }

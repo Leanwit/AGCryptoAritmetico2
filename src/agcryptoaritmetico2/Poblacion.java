@@ -60,4 +60,14 @@ public class Poblacion {
         }
         return resultado;// retorna resultado
     }
+    
+    public Individuo esSolucion() {
+        Individuo resultado = null;
+        for (Individuo aux : individuos) {
+            if (aux.getAptitud() == 0) {
+                resultado = aux;
+            }
+        }
+        return resultado;
+    }
 }

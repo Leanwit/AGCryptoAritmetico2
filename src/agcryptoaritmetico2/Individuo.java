@@ -22,6 +22,10 @@ public class Individuo implements Comparable {
         setAptitudSuma(operacion);
     }
     
+    public double getAptitud() {
+        return this.aptitud;
+    }
+    
     
     @Override
     public int compareTo(Object aux) {

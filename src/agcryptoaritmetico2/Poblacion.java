@@ -26,6 +26,41 @@ public class Poblacion {
         }
         this.numeroPoblacion = 1;
     }
+    
+    //Constructor para generar poblaciones nuevas a partir de una anterior utilizando los operadores
+    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion) {
+        this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
+        Individuo unIndividuo;
+
+        //Seleccion -------------------------------------------------------
+        Set<Individuo> individuosViejos = poblacion.getIndividuos();
+        Iterator it = individuosViejos.iterator();
+        for (int i = 0; i < 10; i++) {
+            unIndividuo = new Individuo((Individuo) it.next());
+            this.individuos.add(unIndividuo);
+        }
+
+        //Cruza  -------------------------------------------------------        
+        for (int i = 0; i < 5; i++) {
+            String[] hijos = cruzaCiclico(poblacion);
+            unIndividuo = new Individuo(hijos[0], operacion);
+            this.individuos.add(unIndividuo);
+            unIndividuo = new Individuo(hijos[1], operacion);
+            this.individuos.add(unIndividuo);
+        }
+
+        //Mutacion -------------------------------------------------------
+        Iterator it2 = individuosViejos.iterator();
+        for (int i = 0; i < 80; i++) {
+            Individuo aux = (Individuo) it2.next();
+            unIndividuo = new Individuo(aux.mutacion(), operacion);
+            this.individuos.add(unIndividuo);
+        }
+    }
+    
+    public int getNumeroPoblacion() {
+        return this.numeroPoblacion;
+    }
 
     private String vectorPalabraOperacion(String operacion) {
         String operando = "";
@@ -69,5 +104,13 @@ public class Poblacion {
             }
         }
         return resultado;
+    }
+    
+    public double aptitudProm2() {
+        double sum = 0;
+        for (Individuo aux : individuos) {
+            sum += aux.getAptitud2();
+        }
+        return (sum / individuos.size());
     }
 }

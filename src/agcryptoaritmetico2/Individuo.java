@@ -76,10 +76,25 @@ public class Individuo implements Comparable {
      * un string
      */
     private static long calcularString(String cadena) throws ScriptException {
+        String aux = "";
+        boolean bandera = true;
+        
+        //Metodo para eliminar los ceros que estan adelante para que pueda calcular correctamente
+        for (int i = 0; i < cadena.length(); i++) {
+            if (bandera && cadena.charAt(i) == '0') {
+                if (cadena.charAt(i + 1) != '0') {
+                    bandera = false;
+                }
+            } else {
+                if (cadena.charAt(i) == '+' || cadena.charAt(i) == '-' || cadena.charAt(i) == '/' || cadena.charAt(i) == '*') {
+                    bandera = true;
+                }
+                aux += cadena.charAt(i);
+            }
+        }       
         ScriptEngineManager mgr = new ScriptEngineManager();
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        
-        long resultado = ((Number) engine.eval(cadena)).longValue(); //evalua la expresion y lo pasa al tipo de dato long
+        long resultado = ((Number) engine.eval(aux)).longValue();        
         return resultado;
     }
 

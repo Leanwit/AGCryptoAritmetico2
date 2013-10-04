@@ -1,5 +1,6 @@
 package agcryptoaritmetico2;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Random;
@@ -15,13 +16,14 @@ public class Poblacion {
     private Random r = new Random();
     private int numeroPoblacion;
     private String operacion;
+   
 
     //Constructor para generar primer poblacion aleatoria
-    public Poblacion(String operacion, int cantIndividuos) {
-        this.operacion = operacion;
+    public Poblacion(String operacion, int cantIndividuos, ArrayList restriccion) {
+        this.operacion = operacion;        
         String vectorPalabra = vectorPalabraOperacion(operacion);
         for (int i = 0; i < cantIndividuos; i++) {
-            Individuo unIndividuo = new Individuo(mezclaVector(vectorPalabra), operacion);
+            Individuo unIndividuo = new Individuo(mezclaVector(vectorPalabra), operacion,restriccion);
             individuos.add(unIndividuo);
         }
         this.numeroPoblacion = 1;
@@ -33,29 +35,29 @@ public class Poblacion {
         Individuo unIndividuo;
 
         //Seleccion -------------------------------------------------------
-        Set<Individuo> individuosViejos = poblacion.getIndividuos();
-        Iterator it = individuosViejos.iterator();
-        for (int i = 0; i < 10; i++) {
-            unIndividuo = new Individuo((Individuo) it.next());
-            this.individuos.add(unIndividuo);
-        }
-
-        //Cruza  -------------------------------------------------------        
-        for (int i = 0; i < 5; i++) {
-            String[] hijos = cruzaCiclico(poblacion);
-            unIndividuo = new Individuo(hijos[0], operacion);
-            this.individuos.add(unIndividuo);
-            unIndividuo = new Individuo(hijos[1], operacion);
-            this.individuos.add(unIndividuo);
-        }
-
-        //Mutacion -------------------------------------------------------
-        Iterator it2 = individuosViejos.iterator();
-        for (int i = 0; i < 80; i++) {
-            Individuo aux = (Individuo) it2.next();
-            unIndividuo = new Individuo(aux.mutacion(), operacion);
-            this.individuos.add(unIndividuo);
-        }
+//        Set<Individuo> individuosViejos = poblacion.getIndividuos();
+//        Iterator it = individuosViejos.iterator();
+//        for (int i = 0; i < 10; i++) {
+//            unIndividuo = new Individuo((Individuo) it.next);
+//            this.individuos.add(unIndividuo);
+//        }
+//
+//        //Cruza  -------------------------------------------------------        
+//        for (int i = 0; i < 5; i++) {
+//            String[] hijos = cruzaCiclico(poblacion);
+//            unIndividuo = new Individuo(hijos[0], operacion);
+//            this.individuos.add(unIndividuo);
+//            unIndividuo = new Individuo(hijos[1], operacion);
+//            this.individuos.add(unIndividuo);
+//        }
+//
+//        //Mutacion -------------------------------------------------------
+//        Iterator it2 = individuosViejos.iterator();
+//        for (int i = 0; i < 80; i++) {
+//            Individuo aux = (Individuo) it2.next();
+//            unIndividuo = new Individuo(aux.mutacion(), operacion);
+//            this.individuos.add(unIndividuo);
+//        }
     }
     
     public int getNumeroPoblacion() {
@@ -81,18 +83,19 @@ public class Poblacion {
         }
         if (operacionCompleta.length() > 10) {
             operando = null;
-        }
+        }        
         return operando;
     }
     
     private String mezclaVector(String palabra) {
-        String resultado = "";
-        int nrand1;
-        for (int i = 0; i < palabra.length(); i++) {
+        String resultado = "";        
+        int nrand1, aux = palabra.length();
+        
+        for (int i = 0; i < aux; i++) {
             nrand1 = r.nextInt(palabra.length());
             resultado += palabra.charAt(nrand1);
             palabra = palabra.substring(0, nrand1) + palabra.substring(nrand1 + 1);
-        }
+        }        
         return resultado;// retorna resultado
     }
     
@@ -109,8 +112,18 @@ public class Poblacion {
     public double aptitudProm2() {
         double sum = 0;
         for (Individuo aux : individuos) {
-            sum += aux.getAptitud2();
+            sum += aux.getAptitud();
         }
         return (sum / individuos.size());
+    }
+    
+    public void agregarIndividuo(Individuo individuo) {
+        this.individuos.add(individuo);
+    }
+
+   
+
+    public Set<Individuo> getIndividuos() {
+        return this.individuos;
     }
 }

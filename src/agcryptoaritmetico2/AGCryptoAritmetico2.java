@@ -17,7 +17,8 @@ public class AGCryptoAritmetico2 {
     public static void comenzarAlgoritmo(String operacion, int cantIndividuos) {
 
         //Generar primer población ALEATORIA
-        Poblacion poblacion = new Poblacion(operacion, cantIndividuos);
+
+        Poblacion poblacion = new Poblacion(operacion, cantIndividuos, obtenerRestriccion(operacion));
         //Crear nueva generacion de poblacion        
         int cantIt = 0;
         while (poblacion.esSolucion() == null /*&& cont!=1000*/) {
@@ -39,24 +40,26 @@ public class AGCryptoAritmetico2 {
         }
     }
 
-    public void restricciones(String operacion) {
+    public static ArrayList obtenerRestriccion(String operacion) {
         ArrayList restriccion = new ArrayList();
         int[] vector = null;
         int posicion = 0, contVector = 0;
         boolean bandera = false;
-        
+
         //Saca la primer posicion del primer caracter despues del resultado
-        for (int i = 0; i < operacion.length(); i++) { 
+        for (int i = 0; i < operacion.length(); i++) {
             if (operacion.charAt(i) == '=') {
                 posicion = i + 1;
             }
         }
-        
+
         for (int i = posicion; i < operacion.length(); i++) {
 
             for (int k = 0; k < restriccion.size(); k++) { // Verifica si el caracter del resultado ya existe
                 for (int l = 0; l < vector.length; l++) {  // Para no agregar dos restricciones iguales
-                    if (vector[l] == i) {bandera = true;}
+                    if (vector[l] == i) {
+                        bandera = true;
+                    }
                 }
             }
 
@@ -64,7 +67,7 @@ public class AGCryptoAritmetico2 {
                 vector = new int[10];
                 for (int j = 0; j < operacion.length(); j++) {//Recorre toda la operacion buscando igualdad con el caracter tomado
                     if (operacion.charAt(j) == operacion.charAt(i)) {
-                        vector[contVector] = j; 
+                        vector[contVector] = j;
                         contVector++;
                     }
                 }
@@ -73,6 +76,6 @@ public class AGCryptoAritmetico2 {
             }
             bandera = false;
         }
-
+        return restriccion;
     }
 }

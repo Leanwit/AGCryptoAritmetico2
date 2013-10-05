@@ -17,7 +17,7 @@ public class Individuo implements Comparable {
 
     public Individuo(String palabra, String operacion, ArrayList restricciones) { //palabra = string de letras únicas correspondiente a la operacion
         this.genes = palabra;
-        System.out.println(genes);
+        System.out.println(genes+ " " + aptitud);
         //Calculo de aptitud
         setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros
     }
@@ -28,18 +28,18 @@ public class Individuo implements Comparable {
 
     //Calcular la APTITUD del individuo respecto de la operacion guardada
     private void setAptitud(String operacion, ArrayList restricciones) {
-        int aptiptud = restricciones.size();
-        int[] aux = null;
+        int auxAptitud = restricciones.size();
+        int[] aux ;
         boolean bandera = true;
         char comparacion;
         
         for (int i = 0; i < restricciones.size(); i++) {
             aux = (int[]) restricciones.get(i);
-            
+            comparacion = operacion.charAt(aux[0]);
             for (int j = 0; j < aux.length; j++) {  
-                comparacion = operacion.charAt(aux[j]);
+                
                 for (int k = 0; k < operacion.length(); k++) {
-                    if (k == aux[i]) {
+                    if (k == aux[j]) {
                         if (operacion.charAt(k) != comparacion) {
                             bandera = false;  
                             k = operacion.length();
@@ -48,11 +48,12 @@ public class Individuo implements Comparable {
             }
         }
             if(bandera) {
-                aptiptud--;
+                auxAptitud--;
             }
             bandera = true;
         }
-        this.aptitud = aptiptud;
+        System.out.println("Aver: "+auxAptitud);
+        this.aptitud = auxAptitud;
     }
 //convierto la operacion de letras en numeros a partir de los genes del individuo
 //peeeero el resultado se calcula a partir de la operacion y no de los genes
@@ -140,5 +141,10 @@ public class Individuo implements Comparable {
             }
         }
         return retorno;
+    }
+    
+    @Override
+    public String toString() {
+        return (this.genes + " - " + this.aptitud);
     }
 }

@@ -83,8 +83,9 @@ public class Poblacion {
         }
         if (operacionCompleta.length() > 10) {
             operando = null;
-        }        
-        return operando;
+        }       
+       
+        return operacionCompleta;
     }
     
     private String mezclaVector(String palabra) {

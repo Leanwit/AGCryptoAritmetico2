@@ -64,14 +64,20 @@ public class AGCryptoAritmetico2 {
             }
 
             if (bandera == false) { //Si no existe se agrega
-                vector = new int[10];
+                vector = new int[20];
                 for (int j = 0; j < operacion.length(); j++) {//Recorre toda la operacion buscando igualdad con el caracter tomado
                     if (operacion.charAt(j) == operacion.charAt(i)) {
                         vector[contVector] = j;
                         contVector++;
                     }
                 }
-                restriccion.add(vector);
+                
+                //Se crear un vector auxiliar para crear vectores dinamicos, con la cantidad de restricciones
+                int [] vectorAuxiliar = new int [contVector];
+                for(int j=0; j<contVector; j++){
+                    vectorAuxiliar[j]=vector[j];
+                }
+                restriccion.add(vectorAuxiliar);
                 contVector = 0;
             }
             bandera = false;

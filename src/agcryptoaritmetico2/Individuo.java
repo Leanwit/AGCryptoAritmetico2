@@ -3,6 +3,7 @@ package agcryptoaritmetico2;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,9 +18,14 @@ public class Individuo implements Comparable {
 
     public Individuo(String palabra, String operacion, ArrayList restricciones) { //palabra = string de letras únicas correspondiente a la operacion
         this.genes = palabra;
-        System.out.println(genes + " " + aptitud);
+        
         //Calculo de aptitud
         setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros
+    }
+
+    public Individuo(Individuo unIndividuo) {
+        this.aptitud = unIndividuo.getAptitud();
+        this.genes = unIndividuo.getGenes();
     }
 
     public double getAptitud() {
@@ -51,8 +57,9 @@ public class Individuo implements Comparable {
                             bandera = false;
                             k = operacion.length();
                         }
-                        contador++;
+                        
                     }
+                    contador++;
                 }
             }
             if (bandera) {
@@ -60,7 +67,7 @@ public class Individuo implements Comparable {
             }
             bandera = true;
         }
-        System.out.println("Aver: " + auxAptitud);
+        
         this.aptitud = auxAptitud;
     }
 //convierto la operacion de letras en numeros a partir de los genes del individuo
@@ -108,7 +115,6 @@ public class Individuo implements Comparable {
             }
             resultado += numResultado;
         }
-
         return (resultado);
     }
 
@@ -126,7 +132,6 @@ public class Individuo implements Comparable {
                 aux += cadena.charAt(i);
                 if (cadena.charAt(i) == '+' || cadena.charAt(i) == '-' || cadena.charAt(i) == '*' || cadena.charAt(i) == '/') {
                     num = i + 1;
-
                 }
             } else {
                 num++;
@@ -157,5 +162,23 @@ public class Individuo implements Comparable {
     @Override
     public String toString() {
         return (this.genes + " - " + this.aptitud);
+    }
+
+    public String getGenes() {
+        return this.genes;
+    }
+    
+     public String mutacion() {
+        Random r = new Random();
+        char[] mutado = new char[10];
+        int nrand1 = 0, nrand2 = 0;
+        while (nrand1 == nrand2) {
+            nrand1 = r.nextInt(10);
+            nrand2 = r.nextInt(10);
+        }
+        mutado = this.genes.toCharArray();
+        mutado[nrand1] = this.genes.charAt(nrand2);
+        mutado[nrand2] = this.genes.charAt(nrand1);
+        return String.copyValueOf(mutado);
     }
 }

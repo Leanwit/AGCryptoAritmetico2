@@ -55,8 +55,7 @@ public class ventanita extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "20", "50", "100" }));
-        jComboBoxCantidadIndividuos.setSelectedIndex(1);
+        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "20", "50", "100", "5000" }));
         jComboBoxCantidadIndividuos.setToolTipText("");
 
         jLabel1.setText("Cantidad de Individuos");
@@ -70,7 +69,7 @@ public class ventanita extends javax.swing.JFrame {
                 .addComponent(jButtonCalcular)
                 .addGap(113, 113, 113))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(42, 42, 42)
                 .addComponent(jComboBoxCantidadIndividuos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

@@ -17,7 +17,7 @@ public class Individuo implements Comparable {
 
     public Individuo(String palabra, String operacion, ArrayList restricciones) { //palabra = string de letras únicas correspondiente a la operacion
         this.genes = palabra;
-        System.out.println(genes+ " " + aptitud);
+        System.out.println(genes + " " + aptitud);
         //Calculo de aptitud
         setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros
     }
@@ -29,34 +29,43 @@ public class Individuo implements Comparable {
     //Calcular la APTITUD del individuo respecto de la operacion guardada
     private void setAptitud(String operacion, ArrayList restricciones) {
         int auxAptitud = restricciones.size();
-        int[] aux ;
+        int[] aux;
         boolean bandera = true;
         char comparacion;
-        
+
         for (int i = 0; i < restricciones.size(); i++) {
             aux = (int[]) restricciones.get(i);
-            comparacion = operacion.charAt(aux[0]);
-            for (int j = 0; j < aux.length; j++) {  
-                
-                for (int k = 0; k < operacion.length(); k++) {
+            comparacion = operacion.charAt(aux[0]); //comparacion posee el valor de la primera ubicacion de la restriccion
+            int contador = 0;
+            for (int j = 0; j < aux.length; j++) {
+                for (int k = contador; k < operacion.length(); k++) {
                     if (k == aux[j]) {
-                        if (operacion.charAt(k) != comparacion) {
-                            bandera = false;  
+                        if (operacion.charAt(k) != comparacion) { //Si en la posicion de la restriccion tiene mismo valor.
+                            bandera = false;
                             k = operacion.length();
-                        }else k=operacion.length();
-                    }                   
+                        } else {
+                            k = operacion.length();
+                        }
+                    } else {
+                        if (operacion.charAt(k) == comparacion) {
+                            bandera = false;
+                            k = operacion.length();
+                        }
+                        contador++;
+                    }
+                }
             }
-        }
-            if(bandera) {
+            if (bandera) {
                 auxAptitud--;
             }
             bandera = true;
         }
-        System.out.println("Aver: "+auxAptitud);
+        System.out.println("Aver: " + auxAptitud);
         this.aptitud = auxAptitud;
     }
 //convierto la operacion de letras en numeros a partir de los genes del individuo
 //peeeero el resultado se calcula a partir de la operacion y no de los genes
+
     private String convOperacion(String operacion) {
         //traducir de letras a numeros
         String resultado = "", numResultado = "";
@@ -99,7 +108,7 @@ public class Individuo implements Comparable {
             }
             resultado += numResultado;
         }
-       
+
         return (resultado);
     }
 
@@ -108,24 +117,26 @@ public class Individuo implements Comparable {
      * un string
      */
     private static long calcularString(String cadena) throws ScriptException {
-        String aux = "";       
+        String aux = "";
 
         //Metodo para eliminar los ceros que estan adelante para que pueda calcular correctamente
-        int num = 0;         
+        int num = 0;
         for (int i = 0; i < cadena.length(); i++) {
-            if (cadena.charAt(i) != '0' || i != num) {               
-                    aux += cadena.charAt(i);
-                    if (cadena.charAt(i) == '+' || cadena.charAt(i) == '-' || cadena.charAt(i) == '*' || cadena.charAt(i) == '/') {
-                        num = i + 1;                  
-                        
-                    }
-                } else num++;
-                    
+            if (cadena.charAt(i) != '0' || i != num) {
+                aux += cadena.charAt(i);
+                if (cadena.charAt(i) == '+' || cadena.charAt(i) == '-' || cadena.charAt(i) == '*' || cadena.charAt(i) == '/') {
+                    num = i + 1;
+
+                }
+            } else {
+                num++;
             }
+
+        }
         ScriptEngineManager mgr = new ScriptEngineManager();
         ScriptEngine engine = mgr.getEngineByName("JavaScript");
         long resultado = ((Number) engine.eval(aux)).longValue();
-        
+
         return resultado;
     }
 
@@ -142,7 +153,7 @@ public class Individuo implements Comparable {
         }
         return retorno;
     }
-    
+
     @Override
     public String toString() {
         return (this.genes + " - " + this.aptitud);

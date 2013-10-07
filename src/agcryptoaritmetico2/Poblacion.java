@@ -37,13 +37,13 @@ public class Poblacion {
 //        Seleccion -------------------------------------------------------
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         Iterator it = individuosViejos.iterator();
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 300; i++) {
             unIndividuo = new Individuo((Individuo) it.next());
             this.individuos.add(unIndividuo);
         }
 
         //Cruza  -------------------------------------------------------        
-         for (int i = 0; i < 250; i++) {
+         for (int i = 0; i < 1500; i++) {
             String[] hijos = cruzaCiclico(poblacion);
             unIndividuo = new Individuo(hijos[0], operacion, restriccion);
             this.individuos.add(unIndividuo);
@@ -53,7 +53,7 @@ public class Poblacion {
 
         //Mutacion -------------------------------------------------------
         Iterator it2 = individuosViejos.iterator();
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 1700; i++) {
             Individuo aux = (Individuo) it2.next();
             unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
             this.individuos.add(unIndividuo);

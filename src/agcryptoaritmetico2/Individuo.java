@@ -20,7 +20,7 @@ public class Individuo implements Comparable {
         this.genes = palabra;
         
         //Calculo de aptitud
-        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros        
+        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros
     }
 
     public Individuo(Individuo unIndividuo) {
@@ -34,17 +34,13 @@ public class Individuo implements Comparable {
 
     //Calcular la APTITUD del individuo respecto de la operacion guardada
     private void setAptitud(String operacion, ArrayList restricciones) {
-        int auxAptitud = 0;
-        int[] aux; 
+        int auxAptitud = restricciones.size();
+        int[] aux;
         boolean bandera = true;
         char comparacion;
-        
-        
-        
-        
+
         for (int i = 0; i < restricciones.size(); i++) {
             aux = (int[]) restricciones.get(i);
-            auxAptitud+= aux.length;
             comparacion = operacion.charAt(aux[0]); //comparacion posee el valor de la primera ubicacion de la restriccion
             int contador = 0;
             for (int j = 0; j < aux.length; j++) {
@@ -54,7 +50,7 @@ public class Individuo implements Comparable {
                             bandera = false;
                             k = operacion.length();
                         } else {
-                            k = operacion.length();                            
+                            k = operacion.length();
                         }
                     } else {
                         if (operacion.charAt(k) == comparacion) {
@@ -67,11 +63,12 @@ public class Individuo implements Comparable {
                 }
             }
             if (bandera) {
-                auxAptitud-= aux.length;                
+                auxAptitud--;
             }
             bandera = true;
-        }        
-        this.aptitud = auxAptitud;        
+        }
+        
+        this.aptitud = auxAptitud;
     }
 //convierto la operacion de letras en numeros a partir de los genes del individuo
 //peeeero el resultado se calcula a partir de la operacion y no de los genes

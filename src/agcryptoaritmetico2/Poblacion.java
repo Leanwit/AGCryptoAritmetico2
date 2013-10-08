@@ -30,21 +30,22 @@ public class Poblacion {
     }
 
     //Constructor para generar poblaciones nuevas a partir de una anterior utilizando los operadores
-    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion) {
+    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion,int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
         this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
         Individuo unIndividuo;
-
+        porcentajeSeleccion= (porcentajeSeleccion*cantIndividuos)/100;
+        porcentajeCruza = (porcentajeCruza*cantIndividuos)/100;
+        porcentajeMutacion = (porcentajeMutacion*cantIndividuos)/100;
 //        Seleccion -------------------------------------------------------
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         Iterator it = individuosViejos.iterator();
-        for (int i = 0; i < 15; i++) {
-            unIndividuo = new Individuo((Individuo) it.next());
-            //System.out.println("Gen:"+ unIndividuo.getGenes()+" Aptiptud:"+ unIndividuo.getAptitud());
+        for (int i = 0; i < porcentajeSeleccion; i++) {
+            unIndividuo = new Individuo((Individuo) it.next());            
             this.individuos.add(unIndividuo);
         }
 
         //Cruza  -------------------------------------------------------        
-         for (int i = 0; i < 25; i++) {
+         for (int i = 0; i < porcentajeCruza; i++) {
             String[] hijos = cruzaCiclico(poblacion);
             unIndividuo = new Individuo(hijos[0], operacion, restriccion);
             this.individuos.add(unIndividuo);
@@ -54,11 +55,13 @@ public class Poblacion {
 
         //Mutacion -------------------------------------------------------
         Iterator it2 = individuosViejos.iterator();
-        for (int i = 0; i < 35; i++) {
+        for (int i = 0; i < porcentajeMutacion; i++) {
             Individuo aux = (Individuo) it2.next();
             unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
             this.individuos.add(unIndividuo);
         }
+        
+       actualizarMutacion();
     }
 
     public int getNumeroPoblacion() {
@@ -212,4 +215,8 @@ public class Poblacion {
         }
         return padre;
     }
+     
+     private void actualizarMutacion(){
+         
+     }
 }

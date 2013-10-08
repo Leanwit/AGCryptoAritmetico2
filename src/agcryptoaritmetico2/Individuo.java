@@ -20,7 +20,8 @@ public class Individuo implements Comparable {
         this.genes = palabra;
 
         //Calculo de aptitud
-        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros       
+        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros   
+        
     }
 
     public Individuo(Individuo unIndividuo) {
@@ -57,7 +58,6 @@ public class Individuo implements Comparable {
                             bandera = false;
                             k = operacion.length();
                         }
-
                     }
                     contador++;
                 }

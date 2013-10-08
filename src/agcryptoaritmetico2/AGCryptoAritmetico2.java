@@ -14,7 +14,7 @@ public class AGCryptoAritmetico2 {
         unaVentana.setVisible(true);
     }
 
-    public static void comenzarAlgoritmo(String operacion, int cantIndividuos) {
+    public static void comenzarAlgoritmo(String operacion, int cantIndividuos,int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
 
         //Generar primer población ALEATORIA
         ArrayList restriccion = obtenerRestriccion(operacion);
@@ -28,7 +28,7 @@ public class AGCryptoAritmetico2 {
             System.out.println("Población Número: " + poblacion.getNumeroPoblacion() + " Aptitud: " + poblacion.aptitudProm2());
 
             cantIt++;
-            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion);
+            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion,porcentajeSeleccion,porcentajeCruza,porcentajeMutacion);
             //if (poblacion.aptitudProm(operacion)>newPoblacion.aptitudProm(operacion)){ 
             poblacion = nuevaPoblacion;
             //}              

@@ -98,7 +98,7 @@
                 <StringItem index="1" value="20"/>
                 <StringItem index="2" value="50"/>
                 <StringItem index="3" value="100"/>
-                <StringItem index="4" value="5000"/>
+                <StringItem index="4" value="1000"/>
               </StringArray>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>

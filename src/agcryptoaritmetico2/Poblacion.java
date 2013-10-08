@@ -37,13 +37,13 @@ public class Poblacion {
 //        Seleccion -------------------------------------------------------
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         Iterator it = individuosViejos.iterator();
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 150; i++) {
             unIndividuo = new Individuo((Individuo) it.next());
             this.individuos.add(unIndividuo);
         }
 
         //Cruza  -------------------------------------------------------        
-         for (int i = 0; i < 1500; i++) {
+         for (int i = 0; i < 250; i++) {
             String[] hijos = cruzaCiclico(poblacion);
             unIndividuo = new Individuo(hijos[0], operacion, restriccion);
             this.individuos.add(unIndividuo);
@@ -53,7 +53,7 @@ public class Poblacion {
 
         //Mutacion -------------------------------------------------------
         Iterator it2 = individuosViejos.iterator();
-        for (int i = 0; i < 1700; i++) {
+        for (int i = 0; i < 350; i++) {
             Individuo aux = (Individuo) it2.next();
             unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
             this.individuos.add(unIndividuo);
@@ -182,15 +182,13 @@ public class Poblacion {
             }
         }
 
-        aux1 = aux2 = 1;
+        
         for (int i = 0; i < 10; i++) {
-            if (hijo1[i] == Character.forDigit(aux1, 10)) {
-                hijo1[i] = '#';
-                aux1++;
+            if (Character.isDigit(hijo1[i])) {
+                hijo1[i] = '#';              
             }
-            if (hijo2[i] == Character.forDigit(aux2, 10)) {
-                hijo2[i] = '#';
-                aux2++;
+            if (Character.isDigit(hijo2[i])) {
+                hijo2[i] = '#';                
             }
         }
 

@@ -18,7 +18,7 @@ public class Individuo implements Comparable {
 
     public Individuo(String palabra, String operacion, ArrayList restricciones) { //palabra = string de letras únicas correspondiente a la operacion
         this.genes = palabra;
-        
+
         //Calculo de aptitud
         setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros
     }
@@ -57,7 +57,7 @@ public class Individuo implements Comparable {
                             bandera = false;
                             k = operacion.length();
                         }
-                        
+
                     }
                     contador++;
                 }
@@ -67,7 +67,7 @@ public class Individuo implements Comparable {
             }
             bandera = true;
         }
-        
+
         this.aptitud = auxAptitud;
     }
 //convierto la operacion de letras en numeros a partir de los genes del individuo
@@ -134,7 +134,17 @@ public class Individuo implements Comparable {
                     num = i + 1;
                 }
             } else {
-                num++;
+                //Para que no borre un 0 que tiene solo un digito
+                if (cadena.charAt(i) == '0' && i == (cadena.length() - 1)) {
+                    aux += cadena.charAt(i);
+                } else {
+                    if (cadena.charAt(i + 1) == '+' || cadena.charAt(i + 1) == '-' || cadena.charAt(i + 1) == '*' || cadena.charAt(i + 1) == '/') {
+                        aux += cadena.charAt(i);
+                    } else {
+                        num++;
+                    }
+                }
+
             }
 
         }
@@ -167,8 +177,8 @@ public class Individuo implements Comparable {
     public String getGenes() {
         return this.genes;
     }
-    
-     public String mutacion() {
+
+    public String mutacion() {
         Random r = new Random();
         char[] mutado = new char[10];
         int nrand1 = 0, nrand2 = 0;

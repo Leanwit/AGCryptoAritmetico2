@@ -20,7 +20,7 @@ public class Individuo implements Comparable {
         this.genes = palabra;
 
         //Calculo de aptitud
-        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros
+        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros       
     }
 
     public Individuo(Individuo unIndividuo) {
@@ -34,7 +34,7 @@ public class Individuo implements Comparable {
 
     //Calcular la APTITUD del individuo respecto de la operacion guardada
     private void setAptitud(String operacion, ArrayList restricciones) {
-        int auxAptitud = restricciones.size();
+        int auxAptitud = 0;
         int[] aux;
         boolean bandera = true;
         char comparacion;
@@ -43,15 +43,15 @@ public class Individuo implements Comparable {
             aux = (int[]) restricciones.get(i);
             comparacion = operacion.charAt(aux[0]); //comparacion posee el valor de la primera ubicacion de la restriccion
             int contador = 0;
+            auxAptitud += aux.length;
             for (int j = 0; j < aux.length; j++) {
                 for (int k = contador; k < operacion.length(); k++) {
                     if (k == aux[j]) {
                         if (operacion.charAt(k) != comparacion) { //Si en la posicion de la restriccion tiene mismo valor.
                             bandera = false;
-                            k = operacion.length();
-                        } else {
-                            k = operacion.length();
                         }
+                        k = operacion.length();
+
                     } else {
                         if (operacion.charAt(k) == comparacion) {
                             bandera = false;
@@ -63,7 +63,7 @@ public class Individuo implements Comparable {
                 }
             }
             if (bandera) {
-                auxAptitud--;
+                auxAptitud -= aux.length;
             }
             bandera = true;
         }
@@ -161,9 +161,9 @@ public class Individuo implements Comparable {
         if (aux instanceof Individuo) {
             Individuo unIndividuo = (Individuo) aux;
             if (this.aptitud > unIndividuo.getAptitud()) {
-                retorno = -1;
-            } else {
                 retorno = 1;
+            } else {
+                retorno = -1;
             }
         }
         return retorno;

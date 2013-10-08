@@ -21,7 +21,7 @@ public class AGCryptoAritmetico2 {
         Poblacion poblacion = new Poblacion(operacion, cantIndividuos, restriccion);
         //Crear nueva generacion de poblacion        
         int cantIt = 0;
-        while (poblacion.esSolucion() == null /*&& cont!=1000*/) {
+        while (poblacion.esSolucion() == null) {
 
             //poblacion.mostrar();
 

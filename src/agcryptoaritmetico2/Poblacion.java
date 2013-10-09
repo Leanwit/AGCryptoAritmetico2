@@ -33,9 +33,7 @@ public class Poblacion {
     public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion,int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
         this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
         Individuo unIndividuo;
-        porcentajeSeleccion= (porcentajeSeleccion*cantIndividuos)/100;
-        porcentajeCruza = (porcentajeCruza*cantIndividuos)/100;
-        porcentajeMutacion = (porcentajeMutacion*cantIndividuos)/100;
+        
 //        Seleccion -------------------------------------------------------
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         Iterator it = individuosViejos.iterator();
@@ -61,7 +59,8 @@ public class Poblacion {
             this.individuos.add(unIndividuo);
         }
         
-       actualizarMutacion();
+       
+       
     }
 
     public int getNumeroPoblacion() {
@@ -216,7 +215,6 @@ public class Poblacion {
         return padre;
     }
      
-     private void actualizarMutacion(){
-         
-     }
+     
+     
 }

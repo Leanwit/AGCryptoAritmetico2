@@ -14,13 +14,19 @@ public class AGCryptoAritmetico2 {
         unaVentana.setVisible(true);
     }
 
-    public static void comenzarAlgoritmo(String operacion, int cantIndividuos,int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
+    public static void comenzarAlgoritmo(String operacion, int cantIndividuos, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
 
         //Generar primer población ALEATORIA
         ArrayList restriccion = obtenerRestriccion(operacion);
         Poblacion poblacion = new Poblacion(operacion, cantIndividuos, restriccion);
         //Crear nueva generacion de poblacion        
         int cantIt = 0;
+        porcentajeSeleccion = (porcentajeSeleccion * cantIndividuos) / 100;
+        porcentajeCruza = (porcentajeCruza * cantIndividuos) / 100;
+        porcentajeMutacion = (porcentajeMutacion * cantIndividuos) / 100;
+        int valorMin = ((int)(0.10*cantIndividuos)), valorMax=((int)(0.50*cantIndividuos));
+        int cte=0;
+        System.out.println("valor min: "+valorMin + "valor max: "+ valorMax);
         while (poblacion.esSolucion() == null) {
 
             //poblacion.mostrar();
@@ -28,9 +34,23 @@ public class AGCryptoAritmetico2 {
             System.out.println("Población Número: " + poblacion.getNumeroPoblacion() + " Aptitud: " + poblacion.aptitudProm2());
 
             cantIt++;
-            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion,porcentajeSeleccion,porcentajeCruza,porcentajeMutacion);
+            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion);
             //if (poblacion.aptitudProm(operacion)>newPoblacion.aptitudProm(operacion)){ 
             poblacion = nuevaPoblacion;
+            
+            //calculo de temperatura por convergencia
+            
+            cte+= ((int)0.05*cantIndividuos);
+            System.out.println("Cte: "+ cte);
+            if (porcentajeMutacion < valorMax) {
+                porcentajeMutacion += cte;
+                porcentajeCruza-=cte;
+                
+            } else {
+                porcentajeMutacion = valorMax;
+                porcentajeCruza=((int)0.40*cantIndividuos);
+            }
+            System.out.println("Porcentaje Mutacion: "+porcentajeMutacion);
             //}              
         }
         //CARTEL GANASTE o LLEGASTE A LAS 100
@@ -71,11 +91,11 @@ public class AGCryptoAritmetico2 {
                         contVector++;
                     }
                 }
-                
+
                 //Se crear un vector auxiliar para crear vectores dinamicos, con la cantidad de restricciones
-                int [] vectorAuxiliar = new int [contVector];
-                for(int j=0; j<contVector; j++){
-                    vectorAuxiliar[j]=vector[j];
+                int[] vectorAuxiliar = new int[contVector];
+                for (int j = 0; j < contVector; j++) {
+                    vectorAuxiliar[j] = vector[j];
                 }
                 restriccion.add(vectorAuxiliar);
                 contVector = 0;
@@ -83,5 +103,8 @@ public class AGCryptoAritmetico2 {
             bandera = false;
         }
         return restriccion;
+    }
+
+    private static void actualizarMutacion() {
     }
 }

@@ -61,7 +61,7 @@ public class ventanita extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "20", "50", "100", "1000" }));
+        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "100", "500", "1000", "5000" }));
         jComboBoxCantidadIndividuos.setToolTipText("");
 
         jLabel1.setText("Cantidad de Individuos");

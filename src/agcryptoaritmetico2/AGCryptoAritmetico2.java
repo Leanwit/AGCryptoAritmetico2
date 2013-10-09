@@ -21,36 +21,37 @@ public class AGCryptoAritmetico2 {
         Poblacion poblacion = new Poblacion(operacion, cantIndividuos, restriccion);
         //Crear nueva generacion de poblacion        
         int cantIt = 0;
+        
+        //Calcular porcentajes de Seleccion/Cruza/Mutacion
         porcentajeSeleccion = (porcentajeSeleccion * cantIndividuos) / 100;
         porcentajeCruza = (porcentajeCruza * cantIndividuos) / 100;
         porcentajeMutacion = (porcentajeMutacion * cantIndividuos) / 100;
+        
         int valorMin = ((int)(0.10*cantIndividuos)), valorMax=((int)(0.50*cantIndividuos));
-        int cte=0;
-        System.out.println("valor min: "+valorMin + "valor max: "+ valorMax);
+        double cte=0, aux=0;
+        
         while (poblacion.esSolucion() == null) {
-
+            
             //poblacion.mostrar();
-
-            System.out.println("Población Número: " + poblacion.getNumeroPoblacion() + " Aptitud: " + poblacion.aptitudProm2());
+            System.out.println("Población Número: " + poblacion.getNumeroPoblacion() + " Aptitud: " + poblacion.aptitudProm2() + " -PM: "+porcentajeMutacion);
 
             cantIt++;
-            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion);
-            //if (poblacion.aptitudProm(operacion)>newPoblacion.aptitudProm(operacion)){ 
+            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion);           
             poblacion = nuevaPoblacion;
             
-            //calculo de temperatura por convergencia
+            //calculo de mutacion por temperatura por convergencia        
             
-            cte+= ((int)0.05*cantIndividuos);
-            System.out.println("Cte: "+ cte);
+            cte+= 0.00025*cantIndividuos;            
             if (porcentajeMutacion < valorMax) {
-                porcentajeMutacion += cte;
-                porcentajeCruza-=cte;
+                porcentajeMutacion += (int)cte*5;
+                porcentajeCruza-=(int)cte*5;
                 
             } else {
                 porcentajeMutacion = valorMax;
                 porcentajeCruza=((int)0.40*cantIndividuos);
             }
-            System.out.println("Porcentaje Mutacion: "+porcentajeMutacion);
+            if(cte>=1) cte=0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre
+            
             //}              
         }
         //CARTEL GANASTE o LLEGASTE A LAS 100

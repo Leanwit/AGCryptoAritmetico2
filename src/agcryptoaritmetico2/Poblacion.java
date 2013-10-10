@@ -16,11 +16,10 @@ public class Poblacion {
     private Random r = new Random();
     private int numeroPoblacion;
     private String operacion;
-    
 
     //Constructor para generar primer poblacion aleatoria
     public Poblacion(String operacion, int cantIndividuos, ArrayList restriccion) {
-        this.operacion = operacion;        
+        this.operacion = operacion;
         String vectorPalabra = vectorPalabraOperacion(operacion);
         for (int i = 0; i < cantIndividuos; i++) {
             Individuo unIndividuo = new Individuo(mezclaVector(vectorPalabra), operacion, restriccion);
@@ -30,20 +29,20 @@ public class Poblacion {
     }
 
     //Constructor para generar poblaciones nuevas a partir de una anterior utilizando los operadores
-    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion,int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
+    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
         this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
         Individuo unIndividuo;
-        
+
 //        Seleccion -------------------------------------------------------
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         Iterator it = individuosViejos.iterator();
         for (int i = 0; i < porcentajeSeleccion; i++) {
-            unIndividuo = new Individuo((Individuo) it.next());            
+            unIndividuo = new Individuo((Individuo) it.next());
             this.individuos.add(unIndividuo);
         }
 
         //Cruza  -------------------------------------------------------        
-         for (int i = 0; i < porcentajeCruza; i++) {
+        for (int i = 0; i < porcentajeCruza; i++) {
             String[] hijos = cruzaCiclico(poblacion);
             unIndividuo = new Individuo(hijos[0], operacion, restriccion);
             this.individuos.add(unIndividuo);
@@ -58,9 +57,6 @@ public class Poblacion {
             unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
             this.individuos.add(unIndividuo);
         }
-        
-       
-       
     }
 
     public int getNumeroPoblacion() {
@@ -132,8 +128,8 @@ public class Poblacion {
     public Set<Individuo> getIndividuos() {
         return this.individuos;
     }
-    
-     private String[] cruzaCiclico(Poblacion poblacionAnterior) {
+
+    private String[] cruzaCiclico(Poblacion poblacionAnterior) {
         char[] padre = null, madre = null, hijo1 = new char[10], hijo2 = new char[10];
         boolean bandera = true;
         int aux1 = 1, aux2 = 1;
@@ -185,13 +181,13 @@ public class Poblacion {
             }
         }
 
-        
+
         for (int i = 0; i < 10; i++) {
             if (Character.isDigit(hijo1[i])) {
-                hijo1[i] = '#';              
+                hijo1[i] = '#';
             }
             if (Character.isDigit(hijo2[i])) {
-                hijo2[i] = '#';                
+                hijo2[i] = '#';
             }
         }
 
@@ -201,8 +197,8 @@ public class Poblacion {
 
         return resultado;
     }
-     
-     private String progenitorAleatorio(Poblacion poblacionAnterior) {
+
+    private String progenitorAleatorio(Poblacion poblacionAnterior) {
         int aleatorio1 = 0, cont = 0;
         String padre = null;
         aleatorio1 = r.nextInt(poblacionAnterior.getIndividuos().size());
@@ -214,7 +210,4 @@ public class Poblacion {
         }
         return padre;
     }
-     
-     
-     
 }

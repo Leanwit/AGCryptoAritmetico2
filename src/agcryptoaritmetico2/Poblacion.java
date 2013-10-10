@@ -32,14 +32,19 @@ public class Poblacion {
     public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
         this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
         Individuo unIndividuo;
-
-//        Seleccion -------------------------------------------------------
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
-        Iterator it = individuosViejos.iterator();
-        for (int i = 0; i < porcentajeSeleccion; i++) {
-            unIndividuo = new Individuo((Individuo) it.next());
-            this.individuos.add(unIndividuo);
-        }
+        
+        //Seleccion Mejores---------------------------------------------
+//        Iterator it = individuosViejos.iterator();
+//        for (int i = 0; i < porcentajeSeleccion; i++) {
+//            unIndividuo = new Individuo((Individuo) it.next());
+//            this.individuos.add(unIndividuo);
+//        }
+
+        //Seleccion Ruleta
+        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion));
+        
+        System.out.println(poblacion.getIndividuos().size());
 
         //Cruza  -------------------------------------------------------        
         for (int i = 0; i < porcentajeCruza; i++) {
@@ -127,6 +132,64 @@ public class Poblacion {
 
     public Set<Individuo> getIndividuos() {
         return this.individuos;
+    }
+
+    private double redondear(double numero, int digitos) {
+        int cifras = (int) Math.pow(10, digitos);
+        return Math.rint(numero * cifras) / cifras;
+    }
+
+    private Set<Individuo> seleccionRuleta(Poblacion poblacionAnterior, int cantDeseado) {
+        Set<Individuo> individuosResultados = new TreeSet();
+
+        double sum = 0;
+        //Suma aptitud Poblacion
+        for (Individuo aux : poblacionAnterior.getIndividuos()) {
+            sum += (aux.getAptitud() + 1);
+        }
+
+        double[] auxCalculo = new double[poblacionAnterior.getIndividuos().size()];
+        double[] auxCalculoAcum = new double[poblacionAnterior.getIndividuos().size()];
+        double sumatoria = 0;
+        int cont = 0;
+        for (Individuo aux : poblacionAnterior.getIndividuos()) {
+            auxCalculo[cont] = redondear(((aux.getAptitud() + 1) / sum) * 1000, 0);
+            sumatoria += auxCalculo[cont];
+            auxCalculoAcum[cont] = sumatoria - 1;
+            cont++;
+        }
+        auxCalculo[poblacionAnterior.getIndividuos().size() - 1] += (1000 - sumatoria);
+
+        int aleatorio1 = 0;
+
+        for (int i = 0; i <= cantDeseado; i++) {
+            System.out.println(i);
+            System.out.println(cantDeseado);
+            aleatorio1 = r.nextInt(1000);
+            cont = 0;
+            for (int j = 0; i <= poblacionAnterior.getIndividuos().size(); i++) {
+                if (j == 0) {
+                    if (aleatorio1 <= auxCalculoAcum[j]) {
+                        j = poblacionAnterior.getIndividuos().size();
+                    }
+                } else {
+                    if ((aleatorio1 >= auxCalculoAcum[j - 1] + 1) && (aleatorio1 <= auxCalculoAcum[j])) {
+                        cont = j;
+                        j = poblacionAnterior.getIndividuos().size();
+                    }
+                }
+            }
+            int num = 0;
+            for (Individuo aux : poblacionAnterior.getIndividuos()) {
+                if (num == cont) {
+                    Individuo unIndividuo = new Individuo(aux);
+                    individuosResultados.add(unIndividuo);
+                    System.out.println(unIndividuo.getGenes() + " " + unIndividuo.getAptitud());
+                }
+                num++;
+            }
+        }
+        return individuosResultados;
     }
 
     private String[] cruzaCiclico(Poblacion poblacionAnterior) {

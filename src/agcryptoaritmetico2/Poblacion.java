@@ -29,7 +29,7 @@ public class Poblacion {
     }
 
     //Constructor para generar poblaciones nuevas a partir de una anterior utilizando los operadores
-    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
+    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion, int maximaAptitud) {
         this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
         Individuo unIndividuo;
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
@@ -42,7 +42,7 @@ public class Poblacion {
 //        }
 
         //Seleccion Ruleta
-        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion));
+        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion, maximaAptitud));
         
         System.out.println(poblacion.getIndividuos().size());
 
@@ -139,13 +139,13 @@ public class Poblacion {
         return Math.rint(numero * cifras) / cifras;
     }
 
-    private Set<Individuo> seleccionRuleta(Poblacion poblacionAnterior, int cantDeseado) {
+    private Set<Individuo> seleccionRuleta(Poblacion poblacionAnterior, int cantDeseado, int maximaAptitud) {
         Set<Individuo> individuosResultados = new TreeSet();
-
+        
         double sum = 0;
         //Suma aptitud Poblacion
         for (Individuo aux : poblacionAnterior.getIndividuos()) {
-            sum += (aux.getAptitud() + 1);
+            sum += (maximaAptitud - (aux.getAptitud() + 1));
         }
 
         double[] auxCalculo = new double[poblacionAnterior.getIndividuos().size()];
@@ -153,38 +153,39 @@ public class Poblacion {
         double sumatoria = 0;
         int cont = 0;
         for (Individuo aux : poblacionAnterior.getIndividuos()) {
-            auxCalculo[cont] = redondear(((aux.getAptitud() + 1) / sum) * 1000, 0);
+            auxCalculo[cont] = redondear(((maximaAptitud - (aux.getAptitud() + 1)) / sum) * 1000, 0); //cantidad de espacios en la ruleta por individuo
             sumatoria += auxCalculo[cont];
             auxCalculoAcum[cont] = sumatoria - 1;
             cont++;
         }
-        auxCalculo[poblacionAnterior.getIndividuos().size() - 1] += (1000 - sumatoria);
+        auxCalculo[poblacionAnterior.getIndividuos().size() - 1] += (1000 - sumatoria); //Corrige problema redondeo para el rango
 
         int aleatorio1 = 0;
-
-        for (int i = 0; i <= cantDeseado; i++) {
-            System.out.println(i);
-            System.out.println(cantDeseado);
+        
+        //Hasta acá es el calculo de los rangos.
+        
+        //Seleccion
+        int pos, num;
+        for (int i = 0; i < cantDeseado; i++) {
             aleatorio1 = r.nextInt(1000);
-            cont = 0;
-            for (int j = 0; i <= poblacionAnterior.getIndividuos().size(); i++) {
+            pos = 0;
+            for (int j = 0; j < poblacionAnterior.getIndividuos().size(); j++) {
                 if (j == 0) {
                     if (aleatorio1 <= auxCalculoAcum[j]) {
                         j = poblacionAnterior.getIndividuos().size();
                     }
                 } else {
                     if ((aleatorio1 >= auxCalculoAcum[j - 1] + 1) && (aleatorio1 <= auxCalculoAcum[j])) {
-                        cont = j;
+                        pos = j;
                         j = poblacionAnterior.getIndividuos().size();
                     }
                 }
             }
-            int num = 0;
+            num = 0;
             for (Individuo aux : poblacionAnterior.getIndividuos()) {
-                if (num == cont) {
+                if (num == pos) {
                     Individuo unIndividuo = new Individuo(aux);
                     individuosResultados.add(unIndividuo);
-                    System.out.println(unIndividuo.getGenes() + " " + unIndividuo.getAptitud());
                 }
                 num++;
             }

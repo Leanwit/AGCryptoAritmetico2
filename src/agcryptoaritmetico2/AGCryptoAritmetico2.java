@@ -1,14 +1,12 @@
 package agcryptoaritmetico2;
 
-import java.io.*;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+
 import agcryptoaritmetico2.interfaz.ventanita;
 import java.util.ArrayList;
 
 public class AGCryptoAritmetico2 {
-
+    static int maximaAptitud;
+    
     public static void main(String[] args) {
         ventanita unaVentana = new ventanita();
         unaVentana.setVisible(true);
@@ -28,13 +26,16 @@ public class AGCryptoAritmetico2 {
         int valorMax = ((int) (0.50 * cantIndividuos));
         double cte = 0;
         int cantIt=0;
+        
+        //calcular pesima aptitud
+        obtenerMaximaAptitud(restriccion);
 
         while (poblacion.esSolucion() == null) {
 
             System.out.println("Población Número: " + poblacion.getNumeroPoblacion() + " Aptitud: " + poblacion.aptitudProm2() + " -PM: " + porcentajeMutacion);
 
             cantIt++;
-            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion);
+            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
             poblacion = nuevaPoblacion;
 
             //calculo de mutacion por temperatura por convergencia        
@@ -93,9 +94,7 @@ public class AGCryptoAritmetico2 {
 
                 //Se crear un vector auxiliar para crear vectores dinamicos, con la cantidad de restricciones
                 int[] vectorAuxiliar = new int[contVector];
-                for (int j = 0; j < contVector; j++) {
-                    vectorAuxiliar[j] = vector[j];
-                }
+                System.arraycopy(vector, 0, vectorAuxiliar, 0, contVector);
                 restriccion.add(vectorAuxiliar);
                 contVector = 0;
             }
@@ -104,6 +103,12 @@ public class AGCryptoAritmetico2 {
         return restriccion;
     }
 
-    private static void actualizarMutacion() {
+    //calcula la cantidad de restricciones que es igual a la peor aptitud del peor individuo
+    private static void obtenerMaximaAptitud(ArrayList restriccion) {        
+        int[] auxVector;
+        for (int i = 0; i < restriccion.size(); i++) {
+            auxVector = (int[]) restriccion.get(i);
+            maximaAptitud += auxVector.length;
+        }
     }
 }

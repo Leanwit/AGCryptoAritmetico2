@@ -38,19 +38,19 @@ public class AGCryptoAritmetico2 {
             Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
             poblacion = nuevaPoblacion;
 
-            //calculo de mutacion por temperatura por convergencia        
-            cte += 0.00025 * cantIndividuos;
-            if (porcentajeMutacion < valorMax) {
-                porcentajeMutacion += (int) cte * 5;
-                porcentajeCruza -= (int) cte * 5;
-
-            } else {
-                porcentajeMutacion = valorMax;
-                porcentajeCruza = ((int) 0.40 * cantIndividuos);
-            }
-            if (cte >= 1) {
-                cte = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre
-            }
+            //calculo de mutacion por temperatura por convergencia  (arreglar)
+//            cte += 0.00025 * cantIndividuos;
+//            if (porcentajeMutacion < valorMax) {
+//                porcentajeMutacion += (int) cte * 5;
+//                porcentajeCruza -= (int) cte * 5;
+//                System.out.println("Por Muta: "+ porcentajeMutacion + "Por cruza: "+porcentajeCruza);
+//            } else {
+//                porcentajeMutacion = valorMax;
+//                porcentajeCruza = ((int) 0.40 * cantIndividuos);
+//            }
+//            if (cte >= 1) {
+//                cte = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre
+//            }
             //}              
         }
         //CARTEL GANASTE o LLEGASTE A LAS 100

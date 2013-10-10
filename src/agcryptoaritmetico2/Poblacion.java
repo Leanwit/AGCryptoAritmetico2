@@ -6,10 +6,6 @@ import java.util.TreeSet;
 import java.util.Random;
 import java.util.Iterator;
 
-/**
- *
- * @author Leanwit
- */
 public class Poblacion {
 
     private Set<Individuo> individuos = new TreeSet();
@@ -35,17 +31,15 @@ public class Poblacion {
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         
         //Seleccion Mejores---------------------------------------------
-//        Iterator it = individuosViejos.iterator();
-//        for (int i = 0; i < porcentajeSeleccion; i++) {
-//            unIndividuo = new Individuo((Individuo) it.next());
-//            this.individuos.add(unIndividuo);
-//        }
+        Iterator it = individuosViejos.iterator();
+        for (int i = 0; i < porcentajeSeleccion; i++) {
+            unIndividuo = new Individuo((Individuo) it.next());
+            this.individuos.add(unIndividuo);
+        }
 
         //Seleccion Ruleta
-        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion, maximaAptitud));
+//        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion, maximaAptitud));
         
-        System.out.println(poblacion.getIndividuos().size());
-
         //Cruza  -------------------------------------------------------        
         for (int i = 0; i < porcentajeCruza; i++) {
             String[] hijos = cruzaCiclico(poblacion);
@@ -62,6 +56,8 @@ public class Poblacion {
             unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
             this.individuos.add(unIndividuo);
         }
+        
+        System.out.println(poblacion.getIndividuos().size());
     }
 
     public int getNumeroPoblacion() {

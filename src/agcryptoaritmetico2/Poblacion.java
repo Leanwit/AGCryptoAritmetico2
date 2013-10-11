@@ -112,7 +112,7 @@ public class Poblacion {
         return resultado;
     }
 
-    public double aptitudProm2() {
+    public double aptitudProm() {
         double sum = 0;
         for (Individuo aux : individuos) {
             sum += aux.getAptitud();

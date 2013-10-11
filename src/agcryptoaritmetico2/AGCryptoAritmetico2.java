@@ -13,104 +13,94 @@ public class AGCryptoAritmetico2 {
     }
 
     public static void comenzarAlgoritmo(String operacion, int cantIndividuos, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
-
-        //Generar primer población ALEATORIA
-        ArrayList restriccion = obtenerRestriccion(operacion);
-        Poblacion poblacion = new Poblacion(operacion, cantIndividuos, restriccion);
+        int poblacionNumero = 1;
+        Poblacion poblacionActual, poblacionNueva;
 
         //Calcular porcentajes de Seleccion/Cruza/Mutacion
         porcentajeSeleccion = (porcentajeSeleccion * cantIndividuos) / 100;
         porcentajeCruza = (porcentajeCruza * cantIndividuos) / 100;
         porcentajeMutacion = (porcentajeMutacion * cantIndividuos) / 100;
 
-        int valorMax = ((int) (0.50 * cantIndividuos));
-        double cte = 0;
-        int cantIt = 0;
-
+        //generar las restricciones para la operacion
+        ArrayList<ArrayList<Integer>> restricciones = obtenerRestricciones(operacion);
         //calcular pesima aptitud
-        obtenerMaximaAptitud(restriccion);
+        obtenerMaximaAptitud(restricciones);
 
-        while (poblacion.esSolucion() == null) {
+        //Generar primer población ALEATORIA        
+        poblacionActual = new Poblacion(operacion, cantIndividuos, restricciones);
+        System.out.println("Población Número: " + poblacionNumero + " Aptitud: " + poblacionActual.aptitudProm() + " %Mutación: " + porcentajeMutacion);
 
-            System.out.println("Población Número: " + poblacion.getNumeroPoblacion() + " Aptitud: " + poblacion.aptitudProm2() + " -PM: " + porcentajeMutacion);
+        int valorMax = ((int) (0.50 * cantIndividuos));
+        double acumulador = 0;
 
-            cantIt++;
-            Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
-            poblacion = nuevaPoblacion;
-            
-            //calculo de mutacion por temperatura por convergencia  (arreglar)
-            cte += 0.00025 * cantIndividuos;
-            if (cte >= 1) {
+        //generar poblaciones nuevas a partir de una vieja mientras no se alcance un individuo resultado
+        while (poblacionActual.esSolucion() == null) {
+            poblacionNueva = new Poblacion(operacion, cantIndividuos, poblacionActual, restricciones, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
+            poblacionActual = poblacionNueva;
+            poblacionNumero++;
+            System.out.println("Población Número: " + poblacionNumero + " Aptitud: " + poblacionActual.aptitudProm() + " %Mutación: " + porcentajeMutacion);
+
+            //calculo de mutacion adaptativa por temperatura ascendente
+            acumulador += 0.00025 * cantIndividuos;
+            if (acumulador >= 1) {
                 if (porcentajeMutacion < valorMax) {
-                    porcentajeMutacion += (int) cte * 4;                    
-                    porcentajeCruza -= cte *2;    
+                    porcentajeMutacion += (int) acumulador * 4; //aumento 4 individuos en mutacion     
+                    porcentajeCruza -= acumulador * 2; //disminuyo 4individuos en Cruza
                 } else {
                     porcentajeMutacion = valorMax;
-                    porcentajeCruza = (100-porcentajeMutacion-porcentajeSeleccion)/2;
-                }                
-            }            
-            if (cte >= 1) {
-                cte = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre                
+                    porcentajeCruza = (100 - porcentajeMutacion - porcentajeSeleccion) / 2;
+                }
             }
-            
+            if (acumulador >= 1) {
+                acumulador = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre                
+            }
+
         }
-        //CARTEL GANASTE o LLEGASTE A LAS 100
-        if (poblacion.esSolucion() != null) {
-            System.out.println("\n" + poblacion.esSolucion().toString());
-            System.out.println("Cantidad de Iteracciones: " + poblacion.getNumeroPoblacion());
-            System.out.println("PorM: "+porcentajeMutacion+"PorS: "+porcentajeSeleccion+"PorC: "+ (porcentajeCruza*2) +"Poblacion: "+poblacion.getIndividuos().size());
+        //CARTEL GANASTE
+        if (poblacionActual.esSolucion() != null) {
+            System.out.println("\n" + poblacionActual.esSolucion().toString());
+            System.out.println("Cantidad de Iteracciones: " + poblacionNumero);
+            System.out.println("%Seleccion: " + porcentajeSeleccion + " %Cruza: " + (porcentajeCruza * 2) + " %Mutacion: " + porcentajeMutacion + " CantIndividuos: " + poblacionActual.getIndividuos().size());
         }
     }
 
-    public static ArrayList obtenerRestriccion(String operacion) {
-        ArrayList restriccion = new ArrayList();
-        int[] vector = null;
-        int posicion = 0, contVector = 0;
-        boolean bandera = false;
+    public static ArrayList<ArrayList<Integer>> obtenerRestricciones(String operacion) {
+        ArrayList<ArrayList<Integer>> restricciones = new ArrayList<>();
+        ArrayList<Integer> posiciones;
+        boolean existeRestriccion = false, bandera = false;
 
-        //Saca la primer posicion del primer caracter despues del resultado
-        for (int i = 0; i < operacion.length(); i++) {
-            if (operacion.charAt(i) == '=') {
-                posicion = i + 1;
-            }
-        }
-
-        for (int i = posicion; i < operacion.length(); i++) {
-
-            for (int k = 0; k < restriccion.size(); k++) { // Verifica si el caracter del resultado ya existe
-                for (int l = 0; l < vector.length; l++) {  // Para no agregar dos restricciones iguales
-                    if (vector[l] == i) {
-                        bandera = true;
+        for (int i = 0; i < operacion.length(); i++) {            
+            if (bandera) {                
+                //verifica que no existra la restriccion ya creada
+                for (int j = 0; j < restricciones.size(); j++) {
+                    if (restricciones.get(j).contains(i)) {
+                        existeRestriccion = true; //quiere decir que existe ya la restriccion
+                        j = restricciones.size();
                     }
                 }
-            }
-
-            if (bandera == false) { //Si no existe se agrega
-                vector = new int[20];
-                for (int j = 0; j < operacion.length(); j++) {//Recorre toda la operacion buscando igualdad con el caracter tomado
-                    if (operacion.charAt(j) == operacion.charAt(i)) {
-                        vector[contVector] = j;
-                        contVector++;
+                //Si no existe paso a crearla
+                if (existeRestriccion == false) {
+                    posiciones = new ArrayList<Integer>();
+                    for (int k = 0; k < operacion.length(); k++) {//Recorre toda la operacion buscando igualdad con el caracter tomado
+                        if (operacion.charAt(k) == operacion.charAt(i)) {
+                            posiciones.add(k);
+                        }
                     }
+                    restricciones.add(posiciones);
                 }
-
-                //Se crear un vector auxiliar para crear vectores dinamicos, con la cantidad de restricciones
-                int[] vectorAuxiliar = new int[contVector];
-                System.arraycopy(vector, 0, vectorAuxiliar, 0, contVector);
-                restriccion.add(vectorAuxiliar);
-                contVector = 0;
+                existeRestriccion = false;
             }
-            bandera = false;
+            if (operacion.charAt(i) == '='){                
+                bandera=true;
+            }
         }
-        return restriccion;
+        return restricciones;
     }
 
     //calcula la cantidad de restricciones que es igual a la peor aptitud del peor individuo
-    private static void obtenerMaximaAptitud(ArrayList restriccion) {
-        int[] auxVector;
-        for (int i = 0; i < restriccion.size(); i++) {
-            auxVector = (int[]) restriccion.get(i);
-            maximaAptitud += auxVector.length;
+    private static void obtenerMaximaAptitud(ArrayList<ArrayList<Integer>> restricciones) {
+        for (int i = 0; i < restricciones.size(); i++) {
+            maximaAptitud += restricciones.get(i).size();
         }
     }
 }

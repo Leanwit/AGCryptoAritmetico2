@@ -13,12 +13,11 @@ public class Individuo implements Comparable {
     private double aptitud;
     private String genes;
 
-    public Individuo(String palabra, String operacion, ArrayList restricciones) { //palabra = string de letras únicas correspondiente a la operacion
+    public Individuo(String palabra, String operacion, ArrayList<ArrayList<Integer>> restricciones) { //palabra = string de letras únicas correspondiente a la operacion
         this.genes = palabra;
 
         //Calculo de aptitud
-        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros   
-        
+        setAptitud(convOperacion(operacion), restricciones); //convOperacion es para pasar operacion a numeros        
     }
 
     public Individuo(Individuo unIndividuo) {
@@ -31,27 +30,24 @@ public class Individuo implements Comparable {
     }
 
     //Calcular la APTITUD del individuo respecto de la operacion guardada
-    private void setAptitud(String operacion, ArrayList restricciones) {
+    private void setAptitud(String operacion, ArrayList<ArrayList<Integer>> restricciones) {
         int auxAptitud = 0;
-        int[] aux;
         boolean bandera = true;
-        char comparacion;
 
-        for (int i = 0; i < restricciones.size(); i++) {
-            aux = (int[]) restricciones.get(i);
-            comparacion = operacion.charAt(aux[0]); //comparacion posee el valor de la primera ubicacion de la restriccion
+        for (int i = 0; i < restricciones.size(); i++) {            
             int contador = 0;
-            auxAptitud += aux.length;
-            for (int j = 0; j < aux.length; j++) {
+            auxAptitud += restricciones.get(i).size();
+            
+            for (int j = 0; j < restricciones.get(i).size(); j++) {
                 for (int k = contador; k < operacion.length(); k++) {
-                    if (k == aux[j]) {
-                        if (operacion.charAt(k) != comparacion) { //Si en la posicion de la restriccion tiene mismo valor.
+                    if (k == restricciones.get(i).get(j)) {
+                        if (operacion.charAt(k) != operacion.charAt(restricciones.get(i).get(0))) { //Si en la posicion de la restriccion tiene mismo valor.
                             bandera = false;
                         }
                         k = operacion.length();
 
                     } else {
-                        if (operacion.charAt(k) == comparacion) {
+                        if (operacion.charAt(k) == operacion.charAt(restricciones.get(i).get(0))) {
                             bandera = false;
                             k = operacion.length();
                         }
@@ -60,11 +56,10 @@ public class Individuo implements Comparable {
                 }
             }
             if (bandera) {
-                auxAptitud -= aux.length;
+                auxAptitud -= restricciones.get(i).size();
             }
             bandera = true;
         }
-
         this.aptitud = auxAptitud;
     }
 //convierto la operacion de letras en numeros a partir de los genes del individuo

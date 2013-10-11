@@ -31,14 +31,14 @@ public class Poblacion {
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
         
         //Seleccion Mejores---------------------------------------------
-        Iterator it = individuosViejos.iterator();
-        for (int i = 0; i < porcentajeSeleccion; i++) {
-            unIndividuo = new Individuo((Individuo) it.next());
-            this.individuos.add(unIndividuo);
-        }
+//        Iterator it = individuosViejos.iterator();
+//        for (int i = 0; i < porcentajeSeleccion; i++) {
+//            unIndividuo = new Individuo((Individuo) it.next());
+//            this.individuos.add(unIndividuo);
+//        }
 
-        //Seleccion Ruleta
-//        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion, maximaAptitud));
+//        Seleccion Ruleta
+        this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion, maximaAptitud));
         
         //Cruza  -------------------------------------------------------        
         for (int i = 0; i < porcentajeCruza; i++) {
@@ -55,9 +55,7 @@ public class Poblacion {
             Individuo aux = (Individuo) it2.next();
             unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
             this.individuos.add(unIndividuo);
-        }
-        
-        System.out.println(poblacion.getIndividuos().size());
+        }        
     }
 
     public int getNumeroPoblacion() {
@@ -181,7 +179,7 @@ public class Poblacion {
             for (Individuo aux : poblacionAnterior.getIndividuos()) {
                 if (num == pos) {
                     Individuo unIndividuo = new Individuo(aux);
-                    individuosResultados.add(unIndividuo);
+                    individuosResultados.add(unIndividuo);                    
                 }
                 num++;
             }

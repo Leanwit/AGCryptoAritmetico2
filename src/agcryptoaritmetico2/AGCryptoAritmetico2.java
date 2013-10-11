@@ -1,12 +1,12 @@
 package agcryptoaritmetico2;
 
-
 import agcryptoaritmetico2.interfaz.ventanita;
 import java.util.ArrayList;
 
 public class AGCryptoAritmetico2 {
+
     static int maximaAptitud;
-    
+
     public static void main(String[] args) {
         ventanita unaVentana = new ventanita();
         unaVentana.setVisible(true);
@@ -16,7 +16,7 @@ public class AGCryptoAritmetico2 {
 
         //Generar primer población ALEATORIA
         ArrayList restriccion = obtenerRestriccion(operacion);
-        Poblacion poblacion = new Poblacion(operacion, cantIndividuos, restriccion);       
+        Poblacion poblacion = new Poblacion(operacion, cantIndividuos, restriccion);
 
         //Calcular porcentajes de Seleccion/Cruza/Mutacion
         porcentajeSeleccion = (porcentajeSeleccion * cantIndividuos) / 100;
@@ -25,8 +25,8 @@ public class AGCryptoAritmetico2 {
 
         int valorMax = ((int) (0.50 * cantIndividuos));
         double cte = 0;
-        int cantIt=0;
-        
+        int cantIt = 0;
+
         //calcular pesima aptitud
         obtenerMaximaAptitud(restriccion);
 
@@ -37,26 +37,28 @@ public class AGCryptoAritmetico2 {
             cantIt++;
             Poblacion nuevaPoblacion = new Poblacion(operacion, cantIndividuos, poblacion, restriccion, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
             poblacion = nuevaPoblacion;
-
+            
             //calculo de mutacion por temperatura por convergencia  (arreglar)
-//            cte += 0.00025 * cantIndividuos;
-//            if (porcentajeMutacion < valorMax) {
-//                porcentajeMutacion += (int) cte * 5;
-//                porcentajeCruza -= (int) cte * 5;
-//                System.out.println("Por Muta: "+ porcentajeMutacion + "Por cruza: "+porcentajeCruza);
-//            } else {
-//                porcentajeMutacion = valorMax;
-//                porcentajeCruza = ((int) 0.40 * cantIndividuos);
-//            }
-//            if (cte >= 1) {
-//                cte = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre
-//            }
-            //}              
+            cte += 0.00025 * cantIndividuos;
+            if (cte >= 1) {
+                if (porcentajeMutacion < valorMax) {
+                    porcentajeMutacion += (int) cte * 4;                    
+                    porcentajeCruza -= cte *2;    
+                } else {
+                    porcentajeMutacion = valorMax;
+                    porcentajeCruza = (100-porcentajeMutacion-porcentajeSeleccion)/2;
+                }                
+            }            
+            if (cte >= 1) {
+                cte = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre                
+            }
+            
         }
         //CARTEL GANASTE o LLEGASTE A LAS 100
         if (poblacion.esSolucion() != null) {
             System.out.println("\n" + poblacion.esSolucion().toString());
             System.out.println("Cantidad de Iteracciones: " + poblacion.getNumeroPoblacion());
+            System.out.println("PorM: "+porcentajeMutacion+"PorS: "+porcentajeSeleccion+"PorC: "+ (porcentajeCruza*2) +"Poblacion: "+poblacion.getIndividuos().size());
         }
     }
 
@@ -104,7 +106,7 @@ public class AGCryptoAritmetico2 {
     }
 
     //calcula la cantidad de restricciones que es igual a la peor aptitud del peor individuo
-    private static void obtenerMaximaAptitud(ArrayList restriccion) {        
+    private static void obtenerMaximaAptitud(ArrayList restriccion) {
         int[] auxVector;
         for (int i = 0; i < restriccion.size(); i++) {
             auxVector = (int[]) restriccion.get(i);

@@ -123,13 +123,15 @@
         <Component class="javax.swing.JComboBox" name="jComboBoxCantidadIndividuos">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="100"/>
-                <StringItem index="1" value="500"/>
-                <StringItem index="2" value="1000"/>
-                <StringItem index="3" value="5000"/>
+              <StringArray count="5">
+                <StringItem index="0" value="10"/>
+                <StringItem index="1" value="100"/>
+                <StringItem index="2" value="500"/>
+                <StringItem index="3" value="1000"/>
+                <StringItem index="4" value="5000"/>
               </StringArray>
             </Property>
+            <Property name="selectedIndex" type="int" value="1"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
@@ -155,12 +157,12 @@
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldSeleccion">
           <Properties>
-            <Property name="text" type="java.lang.String" value="10"/>
+            <Property name="text" type="java.lang.String" value="20"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldCruza">
           <Properties>
-            <Property name="text" type="java.lang.String" value="80"/>
+            <Property name="text" type="java.lang.String" value="70"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldCruzaActionPerformed"/>

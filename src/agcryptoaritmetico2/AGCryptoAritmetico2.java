@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class AGCryptoAritmetico2 {
 
     static int maximaAptitud;
-
+    
     public static void main(String[] args) {
         ventanita unaVentana = new ventanita();
         unaVentana.setVisible(true);
@@ -19,11 +19,12 @@ public class AGCryptoAritmetico2 {
         //Calcular porcentajes de Seleccion/Cruza/Mutacion
         porcentajeSeleccion = (porcentajeSeleccion * cantIndividuos) / 100;
         porcentajeCruza = (porcentajeCruza * cantIndividuos) / 100;
-        porcentajeMutacion = (porcentajeMutacion * cantIndividuos) / 100;
+        porcentajeMutacion = (porcentajeMutacion * cantIndividuos) / 100;      
 
         //generar las restricciones para la operacion
         ArrayList<ArrayList<Integer>> restricciones = obtenerRestricciones(operacion);
-        //calcular pesima aptitud
+        
+        //calcular la peor aptitud
         obtenerMaximaAptitud(restricciones);
 
         //Generar primer población ALEATORIA        
@@ -35,25 +36,28 @@ public class AGCryptoAritmetico2 {
 
         //generar poblaciones nuevas a partir de una vieja mientras no se alcance un individuo resultado
         while (poblacionActual.esSolucion() == null) {
+            System.out.println("CantIndividuos: " + poblacionActual.getIndividuos().size());
             poblacionNueva = new Poblacion(operacion, cantIndividuos, poblacionActual, restricciones, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
             poblacionActual = poblacionNueva;
             poblacionNumero++;
             System.out.println("Población Número: " + poblacionNumero + " Aptitud: " + poblacionActual.aptitudProm() + " %Mutación: " + porcentajeMutacion);
-
-            //calculo de mutacion adaptativa por temperatura ascendente
-            acumulador += 0.00025 * cantIndividuos;
-            if (acumulador >= 1) {
-                if (porcentajeMutacion < valorMax) {
-                    porcentajeMutacion += (int) acumulador * 4; //aumento 4 individuos en mutacion     
-                    porcentajeCruza -= acumulador * 2; //disminuyo 4individuos en Cruza
-                } else {
-                    porcentajeMutacion = valorMax;
-                    porcentajeCruza = (100 - porcentajeMutacion - porcentajeSeleccion) / 2;
-                }
-            }
-            if (acumulador >= 1) {
-                acumulador = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre                
-            }
+            
+//            //calculo de mutacion adaptativa por temperatura ascendente
+//            acumulador += 0.00025 * cantIndividuos;
+//            if (acumulador >= 1) {
+//                if (porcentajeMutacion < valorMax) {
+//                    porcentajeMutacion += (int) acumulador * 4; //aumento 4 individuos en mutacion     
+//                    porcentajeCruza -= acumulador * 2; //disminuyo 4individuos en Cruza
+//                } else {
+//                    porcentajeMutacion = valorMax;
+//                    porcentajeCruza = (100 - porcentajeMutacion - porcentajeSeleccion) / 2;
+//                }
+//            }
+//            if (acumulador >= 1) {
+//                acumulador = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre                
+//            }
+            
+            
 
         }
         //CARTEL GANASTE

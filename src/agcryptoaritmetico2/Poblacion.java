@@ -14,22 +14,22 @@ public class Poblacion {
     private String operacion;
 
     //Constructor para generar primer poblacion aleatoria
-    public Poblacion(String operacion, int cantIndividuos, ArrayList restriccion) {
+    public Poblacion(String operacion, int cantIndividuos, ArrayList<ArrayList<Integer>> restricciones) {
         this.operacion = operacion;
         String vectorPalabra = vectorPalabraOperacion(operacion);
         for (int i = 0; i < cantIndividuos; i++) {
-            Individuo unIndividuo = new Individuo(mezclaVector(vectorPalabra), operacion, restriccion);
+            Individuo unIndividuo = new Individuo(mezclaVector(vectorPalabra), operacion, restricciones);
             individuos.add(unIndividuo);
         }
         this.numeroPoblacion = 1;
     }
 
     //Constructor para generar poblaciones nuevas a partir de una anterior utilizando los operadores
-    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList restriccion, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion, int maximaAptitud) {
+    public Poblacion(String operacion, int cantIndividuos, Poblacion poblacion, ArrayList<ArrayList<Integer>> restricciones, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion, int maximaAptitud) {
         this.numeroPoblacion = poblacion.getNumeroPoblacion() + 1;
         Individuo unIndividuo;
         Set<Individuo> individuosViejos = poblacion.getIndividuos();
-        
+
         //Seleccion Mejores---------------------------------------------
 //        Iterator it = individuosViejos.iterator();
 //        for (int i = 0; i < porcentajeSeleccion; i++) {
@@ -39,23 +39,17 @@ public class Poblacion {
 
 //        Seleccion Ruleta
         this.individuos.addAll(seleccionRuleta(poblacion, porcentajeSeleccion, maximaAptitud));
-        
-        //Cruza  -------------------------------------------------------        
-        for (int i = 0; i < porcentajeCruza; i++) {
-            String[] hijos = cruzaCiclico(poblacion);
-            unIndividuo = new Individuo(hijos[0], operacion, restriccion);
-            this.individuos.add(unIndividuo);
-            unIndividuo = new Individuo(hijos[1], operacion, restriccion);
-            this.individuos.add(unIndividuo);
-        }
+
+        //Cruza Ciclica  -------------------------------------------------------        
+        this.individuos.addAll(cruzaCiclico(poblacion, porcentajeCruza, restricciones, operacion));
 
         //Mutacion -------------------------------------------------------
         Iterator it2 = individuosViejos.iterator();
         for (int i = 0; i < porcentajeMutacion; i++) {
             Individuo aux = (Individuo) it2.next();
-            unIndividuo = new Individuo(aux.mutacion(), operacion, restriccion);
+            unIndividuo = new Individuo(aux.mutacion(), operacion, restricciones);
             this.individuos.add(unIndividuo);
-        }        
+        }
     }
 
     public int getNumeroPoblacion() {
@@ -135,7 +129,7 @@ public class Poblacion {
 
     private Set<Individuo> seleccionRuleta(Poblacion poblacionAnterior, int cantDeseado, int maximaAptitud) {
         Set<Individuo> individuosResultados = new TreeSet();
-        
+
         double sum = 0;
         //Suma aptitud Poblacion
         for (Individuo aux : poblacionAnterior.getIndividuos()) {
@@ -155,9 +149,9 @@ public class Poblacion {
         auxCalculo[poblacionAnterior.getIndividuos().size() - 1] += (1000 - sumatoria); //Corrige problema redondeo para el rango
 
         int aleatorio1 = 0;
-        
+
         //Hasta acá es el calculo de los rangos.
-        
+
         //Seleccion
         int pos, num;
         for (int i = 0; i < cantDeseado; i++) {
@@ -179,7 +173,7 @@ public class Poblacion {
             for (Individuo aux : poblacionAnterior.getIndividuos()) {
                 if (num == pos) {
                     Individuo unIndividuo = new Individuo(aux);
-                    individuosResultados.add(unIndividuo);                    
+                    individuosResultados.add(unIndividuo);
                 }
                 num++;
             }
@@ -187,73 +181,91 @@ public class Poblacion {
         return individuosResultados;
     }
 
-    private String[] cruzaCiclico(Poblacion poblacionAnterior) {
+    private Set<Individuo> cruzaCiclico(Poblacion poblacionAnterior, int cantDeseado, ArrayList<ArrayList<Integer>> restricciones, String operacion) {
+        Set<Individuo> individuosResultados = new TreeSet();
+        Individuo unIndividuo;
         char[] padre = null, madre = null, hijo1 = new char[10], hijo2 = new char[10];
         boolean bandera = true;
-        int aux1 = 1, aux2 = 1;
-
-        padre = progenitorAleatorio(poblacionAnterior).toCharArray();
-        madre = progenitorAleatorio(poblacionAnterior).toCharArray();
-
-        for (int i = 0; i < 10; i++) {
-            if (padre[i] == '#') {
-                padre[i] = Character.forDigit(aux1, 10);
-                aux1++;
-            }
-            if (madre[i] == '#') {
-                madre[i] = Character.forDigit(aux2, 10);
-                aux2++;
-            }
+        boolean cantImp = false;
+        int aux1 = 1, aux2 = 1;       
+        
+        if (cantDeseado % 2 != 0) {
+            cantDeseado = cantDeseado + 1;
+            cantImp = true;
         }
-
-        //si son iguales los cromosomas hay que elegir otro para porque sino quedan iguales los hijos
-        int pos = 0;
-        for (int i = 0; i < 10; i++) {
-            if (padre[i] != madre[i]) {
-                pos = i;
-                i = 10;
-            }
-        }
-        hijo1[pos] = padre[pos];
-        hijo2[pos] = madre[pos];
-
-        while (bandera) {
+ 
+        for (int j = 0; j < (cantDeseado / 2); j++) {
+            hijo1 = new char[10];
+            hijo2 = new char[10];
+            bandera = true;
+            aux1 = 1;
+            aux2 = 1;
+            
+            padre = progenitorAleatorio(poblacionAnterior).toCharArray();
+            madre = progenitorAleatorio(poblacionAnterior).toCharArray();         
+            
             for (int i = 0; i < 10; i++) {
-                if (hijo2[pos] == padre[i]) {
-                    if (hijo1[i] == 0) {
-                        hijo1[i] = padre[i];
-                        hijo2[i] = madre[i];
-                        pos = i;
-                        i = -1;
-                    } else {
-                        bandera = false;
-                        i = 10;
+                if (padre[i] == '#') {
+                    padre[i] = Character.forDigit(aux1, 10);
+                    aux1++;
+                }
+                if (madre[i] == '#') {
+                    madre[i] = Character.forDigit(aux2, 10);
+                    aux2++;
+                }
+            }
+            
+            //si son iguales los cromosomas hay que elegir otro para porque sino quedan iguales los hijos
+            int pos = 0;
+            for (int i = 0; i < 10; i++) {
+                if (padre[i] != madre[i]) {
+                    pos = i;
+                    i = 10;
+                }
+            }
+            hijo1[pos] = padre[pos];
+            hijo2[pos] = madre[pos];
+
+            while (bandera) {
+                for (int i = 0; i < 10; i++) {
+                    if (hijo2[pos] == padre[i]) {
+                        if (hijo1[i] == 0) {
+                            hijo1[i] = padre[i];
+                            hijo2[i] = madre[i];
+                            pos = i;
+                            i = -1;
+                        } else {
+                            bandera = false;
+                            i = 10;
+                        }
                     }
                 }
             }
-        }
-        for (int i = 0; i < 10; i++) {
-            if (hijo1[i] == 0) {
-                hijo1[i] = madre[i];
-                hijo2[i] = padre[i];
+            for (int i = 0; i < 10; i++) {
+                if (hijo1[i] == 0) {
+                    hijo1[i] = madre[i];
+                    hijo2[i] = padre[i];
+                }
+            }
+            for (int i = 0; i < 10; i++) {
+                if (Character.isDigit(hijo1[i])) {
+                    hijo1[i] = '#';
+                }
+                if (Character.isDigit(hijo2[i])) {
+                    hijo2[i] = '#';
+                }
+            }
+                        
+            unIndividuo = new Individuo(String.copyValueOf(hijo1), operacion, restricciones);
+            individuosResultados.add(unIndividuo);            
+            
+            if (!((cantImp) && (j+1 == (cantDeseado / 2)))) {
+                unIndividuo = new Individuo(String.copyValueOf(hijo1), operacion, restricciones);
+                individuosResultados.add(unIndividuo);
             }
         }
-
-
-        for (int i = 0; i < 10; i++) {
-            if (Character.isDigit(hijo1[i])) {
-                hijo1[i] = '#';
-            }
-            if (Character.isDigit(hijo2[i])) {
-                hijo2[i] = '#';
-            }
-        }
-
-        String[] resultado = new String[2];
-        resultado[0] = String.copyValueOf(hijo1);
-        resultado[1] = String.copyValueOf(hijo2);
-
-        return resultado;
+        System.out.println("segunda impresion " + individuosResultados.size());
+        return individuosResultados;
     }
 
     private String progenitorAleatorio(Poblacion poblacionAnterior) {

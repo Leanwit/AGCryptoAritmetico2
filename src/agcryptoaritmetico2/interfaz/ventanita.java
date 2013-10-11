@@ -61,7 +61,8 @@ public class ventanita extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "100", "500", "1000", "5000" }));
+        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "100", "500", "1000", "5000" }));
+        jComboBoxCantidadIndividuos.setSelectedIndex(1);
         jComboBoxCantidadIndividuos.setToolTipText("");
 
         jLabel1.setText("Cantidad de Individuos");
@@ -72,9 +73,9 @@ public class ventanita extends javax.swing.JFrame {
 
         jLabel4.setText("%Mutación");
 
-        jTextFieldSeleccion.setText("10");
+        jTextFieldSeleccion.setText("20");
 
-        jTextFieldCruza.setText("80");
+        jTextFieldCruza.setText("70");
         jTextFieldCruza.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldCruzaActionPerformed(evt);
@@ -160,7 +161,7 @@ public class ventanita extends javax.swing.JFrame {
     private void jButtonCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalcularActionPerformed
         double startTime = System.currentTimeMillis()*0.001;
         AGCryptoAritmetico2.comenzarAlgoritmo(jTextOperacion.getText(), Integer.parseInt(jComboBoxCantidadIndividuos.getSelectedItem().toString()),Integer.parseInt(jTextFieldSeleccion.getText()),
-                (Integer.parseInt(jTextFieldCruza.getText())/2),Integer.parseInt(jTextFieldMutacion.getText()));
+                (Integer.parseInt(jTextFieldCruza.getText())),Integer.parseInt(jTextFieldMutacion.getText()));
         double stopTime = System.currentTimeMillis()*0.001;// TODO add your handling code here:
         System.out.println("Tiempo que tardó en encontrar la solucion: " + Math.rint((stopTime - startTime)*100)/100 + " segundos");
     }//GEN-LAST:event_jButtonCalcularActionPerformed

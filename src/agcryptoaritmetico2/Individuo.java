@@ -34,10 +34,10 @@ public class Individuo implements Comparable {
         int auxAptitud = 0;
         boolean bandera = true;
 
-        for (int i = 0; i < restricciones.size(); i++) {            
+        for (int i = 0; i < restricciones.size(); i++) {
             int contador = 0;
             auxAptitud += restricciones.get(i).size();
-            
+
             for (int j = 0; j < restricciones.get(i).size(); j++) {
                 for (int k = contador; k < operacion.length(); k++) {
                     if (k == restricciones.get(i).get(j)) {

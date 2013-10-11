@@ -264,7 +264,6 @@ public class Poblacion {
                 individuosResultados.add(unIndividuo);
             }
         }
-        System.out.println("segunda impresion " + individuosResultados.size());
         return individuosResultados;
     }
 

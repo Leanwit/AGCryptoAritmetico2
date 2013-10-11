@@ -1,20 +1,25 @@
 package agcryptoaritmetico2;
 
-import agcryptoaritmetico2.interfaz.ventanita;
+import agcryptoaritmetico2.interfaz.*;
 import java.util.ArrayList;
+import javax.swing.JPanel;
 
 public class AGCryptoAritmetico2 {
 
     static int maximaAptitud;
+    static ventanita unaVentana;    
 
-    public static void main(String[] args) {
-        ventanita unaVentana = new ventanita();
+    public static void main(String[] args) {            
+        unaVentana = new ventanita();
         unaVentana.setVisible(true);
     }
 
     public static void comenzarAlgoritmo(String operacion, int cantIndividuos, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
         int poblacionNumero = 1;
         Poblacion poblacionActual, poblacionNueva;
+
+        double[] numPoblaGraf = new double[500];
+        double[] aptPromGraf = new double[500] ;
 
         //Calcular porcentajes de Seleccion/Cruza/Mutacion
         porcentajeSeleccion = (porcentajeSeleccion * cantIndividuos) / 100;
@@ -35,9 +40,16 @@ public class AGCryptoAritmetico2 {
 
         //generar poblaciones nuevas a partir de una vieja mientras no se alcance un individuo resultado
         while (poblacionActual.esSolucion() == null) {
+            
+            numPoblaGraf[poblacionNumero] = poblacionNumero;
+            aptPromGraf[poblacionNumero-1] = poblacionActual.aptitudProm();
+            //Llamada al Grafico
+            
+            
+            
             poblacionNueva = new Poblacion(operacion, cantIndividuos, poblacionActual, restricciones, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
             poblacionActual = poblacionNueva;
-            poblacionNumero++;
+            poblacionNumero++;       
             System.out.println("Población Número: " + poblacionNumero + " Aptitud: " + poblacionActual.aptitudProm() + " %Mutación: " + porcentajeMutacion);
 
             //calculo de mutacion adaptativa por temperatura ascendente
@@ -58,6 +70,7 @@ public class AGCryptoAritmetico2 {
         }
         //CARTEL GANASTE
         if (poblacionActual.esSolucion() != null) {
+            unaVentana.agregarGrafica(String.valueOf(poblacionNumero-1), numPoblaGraf, aptPromGraf);
             System.out.println("\n" + poblacionActual.esSolucion().toString());
             System.out.println("Cantidad de Iteracciones: " + poblacionNumero);
             System.out.println("%Seleccion: " + porcentajeSeleccion + " %Cruza: " + (porcentajeCruza * 2) + " %Mutacion: " + porcentajeMutacion + " CantIndividuos: " + poblacionActual.getIndividuos().size());
@@ -69,8 +82,8 @@ public class AGCryptoAritmetico2 {
         ArrayList<Integer> posiciones;
         boolean existeRestriccion = false, bandera = false;
 
-        for (int i = 0; i < operacion.length(); i++) {            
-            if (bandera) {                
+        for (int i = 0; i < operacion.length(); i++) {
+            if (bandera) {
                 //verifica que no existra la restriccion ya creada
                 for (int j = 0; j < restricciones.size(); j++) {
                     if (restricciones.get(j).contains(i)) {
@@ -90,8 +103,8 @@ public class AGCryptoAritmetico2 {
                 }
                 existeRestriccion = false;
             }
-            if (operacion.charAt(i) == '='){                
-                bandera=true;
+            if (operacion.charAt(i) == '=') {
+                bandera = true;
             }
         }
         return restricciones;

@@ -1,26 +1,47 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package agcryptoaritmetico2.interfaz;
 
-
-
 import agcryptoaritmetico2.AGCryptoAritmetico2;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
  * @author Leanwit
  */
 public class ventanita extends javax.swing.JFrame {
-   
+
+    JFreeChart unGrafico;
+    XYSeriesCollection datos;
+
     /**
      * Creates new form ventanita
      */
-    public ventanita() {        
+    public ventanita() {
+        unGrafico = ChartFactory.createXYLineChart("Grafica", "Poblacion n°", "Aptiptud", datos, PlotOrientation.VERTICAL, true, true, true);
+        datos = new XYSeriesCollection();          
         initComponents();
+     }
+    
+    public void agregarGrafica(String id, double[] x, double[] y) {
+        XYSeries s = new XYSeries(id);
+        int n = x.length;
+        for (int i = 0; i < n; i++) {
+            s.add(x[i], y[i]);
+        }        
+        
+        datos.addSeries(s);
+        unGrafico = ChartFactory.createXYLineChart("Grafica", "Poblacion n°", "Aptiptud", datos, PlotOrientation.VERTICAL, true, true, true);
+        jPanelGrafico = new ChartPanel(unGrafico);
+        this.add(jPanelGrafico);        
+        this.setSize(300, 300);
+        setContentPane(jPanelGrafico);
+        this.setVisible(true);
     }
-
     
 
     /**
@@ -33,18 +54,58 @@ public class ventanita extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanelGrafico = new javax.swing.JPanel();
+        jPanelDatos = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxCantidadIndividuos = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldSeleccion = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldCruza = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldMutacion = new javax.swing.JTextField();
         jTextOperacion = new javax.swing.JTextField();
         jButtonCalcular = new javax.swing.JButton();
-        jComboBoxCantidadIndividuos = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldSeleccion = new javax.swing.JTextField();
-        jTextFieldCruza = new javax.swing.JTextField();
-        jTextFieldMutacion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout jPanelGraficoLayout = new javax.swing.GroupLayout(jPanelGrafico);
+        jPanelGrafico.setLayout(jPanelGraficoLayout);
+        jPanelGraficoLayout.setHorizontalGroup(
+            jPanelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 101, Short.MAX_VALUE)
+        );
+        jPanelGraficoLayout.setVerticalGroup(
+            jPanelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jLabel1.setText("Cantidad de Individuos");
+
+        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "100", "500", "1000", "5000" }));
+        jComboBoxCantidadIndividuos.setToolTipText("");
+
+        jLabel2.setText("% Selección");
+
+        jTextFieldSeleccion.setText("10");
+
+        jLabel3.setText("%Cruza");
+
+        jTextFieldCruza.setText("80");
+        jTextFieldCruza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCruzaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("%Mutación");
+
+        jTextFieldMutacion.setText("10");
+        jTextFieldMutacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldMutacionActionPerformed(evt);
+            }
+        });
 
         jTextOperacion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextOperacion.setText("send+more=money");
@@ -61,86 +122,74 @@ public class ventanita extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxCantidadIndividuos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "100", "500", "1000", "5000" }));
-        jComboBoxCantidadIndividuos.setToolTipText("");
-
-        jLabel1.setText("Cantidad de Individuos");
-
-        jLabel2.setText("% Selección");
-
-        jLabel3.setText("%Cruza");
-
-        jLabel4.setText("%Mutación");
-
-        jTextFieldSeleccion.setText("10");
-
-        jTextFieldCruza.setText("80");
-        jTextFieldCruza.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldCruzaActionPerformed(evt);
-            }
-        });
-
-        jTextFieldMutacion.setText("10");
-        jTextFieldMutacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldMutacionActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+        javax.swing.GroupLayout jPanelDatosLayout = new javax.swing.GroupLayout(jPanelDatos);
+        jPanelDatos.setLayout(jPanelDatosLayout);
+        jPanelDatosLayout.setHorizontalGroup(
+            jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDatosLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelDatosLayout.createSequentialGroup()
+                        .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBoxCantidadIndividuos, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jTextFieldMutacion, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jTextFieldCruza, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jTextFieldSeleccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jTextOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButtonCalcular)
-                .addGap(116, 116, 116))
+                                .addComponent(jTextFieldSeleccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jTextOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelDatosLayout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addComponent(jButtonCalcular)))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanelDatosLayout.setVerticalGroup(
+            jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDatosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jComboBoxCantidadIndividuos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldSeleccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextFieldCruza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanelDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextFieldMutacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jTextOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonCalcular)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(jPanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(368, 368, 368)
+                .addComponent(jPanelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelGrafico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -158,11 +207,11 @@ public class ventanita extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalcularActionPerformed
-        double startTime = System.currentTimeMillis()*0.001;
-        AGCryptoAritmetico2.comenzarAlgoritmo(jTextOperacion.getText(), Integer.parseInt(jComboBoxCantidadIndividuos.getSelectedItem().toString()),Integer.parseInt(jTextFieldSeleccion.getText()),
-                (Integer.parseInt(jTextFieldCruza.getText())/2),Integer.parseInt(jTextFieldMutacion.getText()));
-        double stopTime = System.currentTimeMillis()*0.001;// TODO add your handling code here:
-        System.out.println("Tiempo que tardó en encontrar la solucion: " + Math.rint((stopTime - startTime)*100)/100 + " segundos");
+        double startTime = System.currentTimeMillis() * 0.001;
+        AGCryptoAritmetico2.comenzarAlgoritmo(jTextOperacion.getText(), Integer.parseInt(jComboBoxCantidadIndividuos.getSelectedItem().toString()), Integer.parseInt(jTextFieldSeleccion.getText()),
+                (Integer.parseInt(jTextFieldCruza.getText()) / 2), Integer.parseInt(jTextFieldMutacion.getText()));
+        double stopTime = System.currentTimeMillis() * 0.001;// TODO add your handling code here:
+        System.out.println("Tiempo que tardó en encontrar la solucion: " + Math.rint((stopTime - startTime) * 100) / 100 + " segundos");
     }//GEN-LAST:event_jButtonCalcularActionPerformed
 
     private void jButtonCalcularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCalcularMouseClicked
@@ -219,6 +268,8 @@ public class ventanita extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelDatos;
+    private javax.swing.JPanel jPanelGrafico;
     private javax.swing.JTextField jTextFieldCruza;
     private javax.swing.JTextField jTextFieldMutacion;
     private javax.swing.JTextField jTextFieldSeleccion;

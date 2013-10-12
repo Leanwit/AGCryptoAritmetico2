@@ -7,6 +7,8 @@ package agcryptoaritmetico2.interfaz;
 
 
 import agcryptoaritmetico2.AGCryptoAritmetico2;
+import java.text.DecimalFormat;
+import javax.swing.plaf.SliderUI;
 
 /**
  *
@@ -19,6 +21,7 @@ public class ventanita extends javax.swing.JFrame {
      */
     public ventanita() {        
         initComponents();
+        jSliderLamda.setValue(25);
     }
 
     
@@ -43,6 +46,10 @@ public class ventanita extends javax.swing.JFrame {
         jTextFieldSeleccion = new javax.swing.JTextField();
         jTextFieldCruza = new javax.swing.JTextField();
         jTextFieldMutacion = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabelLamda = new javax.swing.JLabel();
+        jSliderLamda = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,12 +96,25 @@ public class ventanita extends javax.swing.JFrame {
             }
         });
 
+        jLabel5.setText("Lamda");
+
+        jLabelLamda.setText("50");
+
+        jSliderLamda.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSliderLamdaStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(114, 114, 114)
+                        .addComponent(jButtonCalcular))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -110,13 +130,22 @@ public class ventanita extends javax.swing.JFrame {
                                 .addComponent(jTextFieldCruza, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jTextFieldSeleccion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jTextOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButtonCalcular)
-                .addGap(116, 116, 116))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jSliderLamda, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(36, 36, 36)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabelLamda, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jTextOperacion, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,11 +166,19 @@ public class ventanita extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextFieldMutacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSliderLamda, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelLamda))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCalcular)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -158,10 +195,18 @@ public class ventanita extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextFieldMutacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMutacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMutacionActionPerformed
+
+    private void jTextFieldCruzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCruzaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldCruzaActionPerformed
+
     private void jButtonCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalcularActionPerformed
         double startTime = System.currentTimeMillis()*0.001;
         AGCryptoAritmetico2.comenzarAlgoritmo(jTextOperacion.getText(), Integer.parseInt(jComboBoxCantidadIndividuos.getSelectedItem().toString()),Integer.parseInt(jTextFieldSeleccion.getText()),
-                (Integer.parseInt(jTextFieldCruza.getText())),Integer.parseInt(jTextFieldMutacion.getText()));
+            (Integer.parseInt(jTextFieldCruza.getText())),Integer.parseInt(jTextFieldMutacion.getText()), ((double) jSliderLamda.getValue())/100000);
         double stopTime = System.currentTimeMillis()*0.001;// TODO add your handling code here:
         System.out.println("Tiempo que tardó en encontrar la solucion: " + Math.rint((stopTime - startTime)*100)/100 + " segundos");
     }//GEN-LAST:event_jButtonCalcularActionPerformed
@@ -170,13 +215,10 @@ public class ventanita extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonCalcularMouseClicked
 
-    private void jTextFieldMutacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMutacionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldMutacionActionPerformed
-
-    private void jTextFieldCruzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCruzaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldCruzaActionPerformed
+    private void jSliderLamdaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderLamdaStateChanged
+        DecimalFormat formato = new DecimalFormat("0.000000");
+        jLabelLamda.setText(formato.format(((double)jSliderLamda.getValue()/100000)));
+    }//GEN-LAST:event_jSliderLamdaStateChanged
 
     /**
      * @param args the command line arguments
@@ -219,7 +261,11 @@ public class ventanita extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelLamda;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSlider jSliderLamda;
     private javax.swing.JTextField jTextFieldCruza;
     private javax.swing.JTextField jTextFieldMutacion;
     private javax.swing.JTextField jTextFieldSeleccion;

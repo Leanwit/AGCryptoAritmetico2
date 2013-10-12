@@ -12,7 +12,7 @@ public class AGCryptoAritmetico2 {
         unaVentana.setVisible(true);
     }
 
-    public static void comenzarAlgoritmo(String operacion, int cantIndividuos, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion) {
+    public static void comenzarAlgoritmo(String operacion, int cantIndividuos, int porcentajeSeleccion, int porcentajeCruza, int porcentajeMutacion, double lamda) {
         int poblacionNumero = 1;
         Poblacion poblacionActual, poblacionNueva;
 
@@ -35,27 +35,24 @@ public class AGCryptoAritmetico2 {
 
         //generar poblaciones nuevas a partir de una vieja mientras no se alcance un individuo resultado
         while (poblacionActual.esSolucion() == null) {
-            //System.out.println("Población Número: " + poblacionNumero + " Aptitud: " + poblacionActual.aptitudProm() + " %Mutación: " + porcentajeMutacion + " Cantided de porblación: "+ poblacionActual.getIndividuos().size());
+            System.out.println("Población Número: " + poblacionNumero + " Aptitud: " + poblacionActual.aptitudProm() + " %Mutación: " + porcentajeMutacion + " Cantided de porblación: "+ poblacionActual.getIndividuos().size());
             
             poblacionNueva = new Poblacion(operacion, cantIndividuos, poblacionActual, restricciones, porcentajeSeleccion, porcentajeCruza, porcentajeMutacion, maximaAptitud);
             poblacionActual = poblacionNueva;
             poblacionNumero++;
             
             //calculo de mutacion adaptativa por temperatura ascendente
-            acumulador += 0.00025 * cantIndividuos;
+            acumulador += lamda * cantIndividuos;
             if (acumulador >= 1) {
                 if (porcentajeMutacion < valorMax) {
-                    porcentajeMutacion += (int) acumulador * 4; //aumento 4 individuos en mutacion     
-                    porcentajeCruza -= acumulador * 4; //disminuyo 4individuos en Cruza
+                    porcentajeMutacion += 1; //aumento 4 individuos en mutacion     
+                    porcentajeCruza -= 1; //disminuyo 4individuos en Cruza
+                    acumulador = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre 
                 } else {
                     porcentajeMutacion = valorMax;
                     porcentajeCruza = (100 - porcentajeMutacion - porcentajeSeleccion);
                 }
             }
-            if (acumulador >= 1) {
-                acumulador = 0; //Setea devuelta a 0 para solucionar el problema que sumaba siempre                
-            }
-
         }
         //CARTEL GANASTE
         if (poblacionActual.esSolucion() != null) {
